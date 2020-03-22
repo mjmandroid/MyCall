@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'com.neenbedankt.android-apt' //添加这行
+android {
+    compileSdkVersion 28
+    buildToolsVersion '27.0.3'
+    defaultConfig {
+        applicationId "com.it.fan.mycall"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            // 混淆
+            // Zipalign优化
+            zipAlignEnabled false
+
+            // 移除无用的resource文件
+            shrinkResources false
+            // 前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 自定义输出配置
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->  // each 改为 all
+//                    def fileName = "Allsale_${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                    def fileName = "MyCall_${defaultConfig.versionName}.apk"
+                    def outFile = output.outputFile
+                    if (outFile != null && outFile.name.endsWith('.apk')) {
+                        outputFileName = fileName  //  output.outputFile 改为 outputFileName
+                    }
+                }
+            }
+        }
+    }
+
+
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation('cn.qqtheme.framework:WheelPicker:1.3.4') {
+        exclude group: 'com.android.support'
+    }
+    //compile 'com.android.support:design:26.0.0-alpha1'
+    implementation project(':baseRecyclerViewAdapter')
+    compile 'com.android.support:appcompat-v7:28.+'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.zhy:autolayout:1.4.5'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
+    implementation 'com.lzy.net:okgo:2.1.3'
+    implementation 'com.lzy.net:okserver:1.1.2'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jakewharton:butterknife:8.2.1'
+    implementation 'com.android.support:recyclerview-v7:28.+'
+    testImplementation 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.1'
+    implementation 'com.github.razerdp:BasePopup:2.0.7'
+    implementation 'com.android.support:design:28.+'
+    implementation "me.leolin:ShortcutBadger:1.1.22@aar"
+}

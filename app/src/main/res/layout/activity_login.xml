@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/login_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--<ImageView
+        android:scaleType="fitXY"
+        android:src="@drawable/beijing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+    <com.zhy.autolayout.AutoLinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+           <!-- <ImageView
+                android:src="@drawable/login_bg"
+                android:scaleType="fitXY"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />-->
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:src="@drawable/login_logo"
+                android:padding="20dp"
+                android:background="@drawable/shape_login_icbg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!--<ImageView
+                android:id="@+id/activity_new_login_back"
+                android:src="@drawable/login_back"
+                android:layout_marginLeft="48px"
+                android:layout_marginTop="50px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />-->
+        </RelativeLayout>
+
+
+        <com.zhy.autolayout.AutoLinearLayout
+            android:layout_marginTop="120px"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="76px"
+                android:src="@drawable/login_615"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/activity_new_login_userName"
+                android:layout_gravity="center_vertical"
+                android:hint="请输入用户名"
+                android:paddingLeft="30px"
+                android:textSize="30px"
+                android:layout_marginRight="68px"
+                android:background="@null"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:text="18370995392"
+                android:layout_height="wrap_content" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+        <View
+            android:id="@+id/activity_new_login_line"
+            android:layout_marginTop="22px"
+            android:layout_marginLeft="68px"
+            android:layout_marginRight="68px"
+            android:background="@color/divider_cccccc"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:layout_marginTop="24px"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="76px"
+                android:src="@drawable/password_615"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/activity_new_login_userPwd"
+                android:layout_gravity="center_vertical"
+                android:textSize="30px"
+                android:hint="请输入密码"
+                android:paddingLeft="30px"
+                android:layout_marginRight="68px"
+                android:background="@null"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:inputType="textPassword"
+                android:text="123456"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="22px"
+            android:layout_marginLeft="68px"
+            android:layout_marginRight="68px"
+            android:background="@color/divider_cccccc"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/activity_new_login_go"
+            android:layout_marginTop="80px"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            android:gravity="center"
+            android:background="@drawable/shape_kcfl_pressed"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="70px"
+            android:layout_marginRight="70px"
+            android:layout_width="match_parent"
+            android:layout_height="70px" />
+
+
+    </com.zhy.autolayout.AutoLinearLayout>
+
+
+</com.zhy.autolayout.AutoRelativeLayout>

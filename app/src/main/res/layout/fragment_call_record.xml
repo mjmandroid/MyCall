@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:background="#ffffff"
+        app:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.zhy.autolayout.AutoLinearLayout
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll|snap"
+            android:layout_marginBottom="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="真实主叫"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/fragment_call_record_real_caller"
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:hint="请填写真实主叫"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:background="@drawable/shape_edit_text_bg"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="真实被叫"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/fragment_call_record_real_called"
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:hint="请填写真实被叫"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:background="@drawable/shape_edit_text_bg"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="起始时间"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/fragment_call_record_real_startTime"
+                    android:layout_marginRight="24px"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:paddingRight="10dp"
+                    android:drawableRight="@drawable/xiala"
+                    android:background="@drawable/shape_edit_text_bg"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="终止时间"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/fragment_call_record_real_endTime"
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:drawableRight="@drawable/xiala"
+                    android:background="@drawable/shape_edit_text_bg"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="查询条件"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/fragment_call_record_real_queryType"
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:text="默认"
+                    android:drawableRight="@drawable/xiala"
+                    android:background="@drawable/shape_edit_text_bg"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginLeft="30px"
+                android:layout_marginRight="30px"
+                android:layout_width="match_parent"
+                android:layout_height="100px">
+
+                <TextView
+                    android:layout_marginRight="24px"
+                    android:layout_gravity="center_vertical"
+                    android:text="通话状态"
+                    android:textColor="@color/text555555"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fragment_call_record_real_callStatus"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:text="默认"
+                android:drawableRight="@drawable/xiala"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/fragment_call_record_real_search"
+                android:layout_marginTop="30px"
+                android:text="搜索"
+                android:textColor="@color/white"
+                android:textSize="34px"
+                android:gravity="center"
+                android:background="@drawable/shape_kcfl_pressed"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="70px"
+                android:layout_marginRight="70px"
+                android:layout_width="match_parent"
+                android:layout_height="70px" />
+
+        </com.zhy.autolayout.AutoLinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_call_record_real_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</com.zhy.autolayout.AutoLinearLayout>
