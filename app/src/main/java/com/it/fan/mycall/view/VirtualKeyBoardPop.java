@@ -1,7 +1,10 @@
 package com.it.fan.mycall.view;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.it.fan.mycall.R;
 
@@ -36,4 +39,15 @@ public class VirtualKeyBoardPop extends BasePopupWindow {
     public View onCreateContentView() {
         return createPopupById(R.layout.pop_virtual_keyboard);
     }
+
+    @Override
+    protected Animation onCreateShowAnimation() {
+        return AnimationUtils.loadAnimation(getContext(),R.anim.pop_in);
+    }
+
+    @Override
+    protected Animation onCreateDismissAnimation() {
+        return AnimationUtils.loadAnimation(getContext(),R.anim.pop_out);
+    }
+
 }
