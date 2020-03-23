@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        >
+        <TextView
+            android:id="@+id/topbar_btn_left"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/black_back"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:background="@null"
+            android:drawablePadding="5dp"
+            android:layout_marginLeft="18dp"
+            />
+        <TextView
+
+            android:text="患者信息"
+            android:textColor="@color/text333333"
+            android:textSize="35px"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:background="@null"
+            />
+    </RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_patient_list_swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_patient_list_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</com.zhy.autolayout.AutoLinearLayout>

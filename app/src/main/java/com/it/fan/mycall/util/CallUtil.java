@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.it.fan.mycall.bean.BindBean;
@@ -29,7 +28,7 @@ public class CallUtil {
     }
 
     private static void bindPhone(final Context context, final String phoneNum) {
-        final String attachTure = SpUtil.getString(context, GloableConstant.ATTACHETRUE);
+        String attachTure = SpUtil.getString(context, GloableConstant.ATTACHETRUE);
         final String attachVirtual = SpUtil.getString(context, GloableConstant.ATTACHEVITRUAL);
 
         OkGo.post(Api.BINDCALL)
@@ -46,11 +45,22 @@ public class CallUtil {
                                 Toast.makeText(context,"请先允许拨号权限",Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            LogUtils.loge("onSuccess",attachVirtual+"-"+attachTure+"-"+phoneNum );
                             context.startActivity(intent);
                         }
                     }
                 });
 
     }
+
+    public static void callDirectly(Context context, String phoneNum) {
+
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNum));
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            Toast.makeText(context,"请先允许拨号权限",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        context.startActivity(intent);
+    }
+
 }

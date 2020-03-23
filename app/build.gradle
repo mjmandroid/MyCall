@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt' //添加这行
 android {
     compileSdkVersion 28
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.1'
     defaultConfig {
         applicationId "com.it.fan.mycall"
         minSdkVersion 19
@@ -49,12 +49,12 @@ android {
     }
 
 
-        lintOptions {
-            checkReleaseBuilds false
-            // Or, if you prefer, you can continue to check for errors in release builds,
-            // but continue the build even when errors are found:
-            abortOnError false
-        }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 
 }
 
@@ -63,12 +63,16 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+//    implementation('cn.qqtheme.framework:WheelPicker:1.3.4') {
+//        exclude group: 'com.android.support'
+//    }
+    //compile 'com.android.support:design:26.0.0-alpha1'
+    implementation project(':baseRecyclerViewAdapter')
+
     implementation('cn.qqtheme.framework:WheelPicker:1.3.4') {
         exclude group: 'com.android.support'
     }
-    //compile 'com.android.support:design:26.0.0-alpha1'
-    implementation project(':baseRecyclerViewAdapter')
-    compile 'com.android.support:appcompat-v7:28.+'
+    implementation 'com.android.support:appcompat-v7:28.+'
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     implementation 'com.zhy:autolayout:1.4.5'
     implementation 'com.google.code.gson:gson:2.8.0'
@@ -80,9 +84,9 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.jakewharton:butterknife:8.2.1'
     implementation 'com.android.support:recyclerview-v7:28.+'
+    implementation 'com.github.razerdp:BasePopup:2.2.1'
+    implementation 'com.android.support:design:28.+'
+    implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.1'
-    implementation 'com.github.razerdp:BasePopup:2.0.7'
-    implementation 'com.android.support:design:28.+'
-    implementation "me.leolin:ShortcutBadger:1.1.22@aar"
 }

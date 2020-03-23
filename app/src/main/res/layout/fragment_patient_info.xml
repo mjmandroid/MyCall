@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zhy.autolayout.AutoLinearLayout
+        android:orientation="vertical"
+        android:focusableInTouchMode="true"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="城市名称"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_cityEditText"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:hint="输入城市名称查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="省      份"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_provinceEditText"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:hint="输入省份名称查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="项目医院"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_hospitalEditText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="24px"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_edit_text_bg"
+                android:hint="输入项目医院查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="项目药房"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_drugstoreEditText"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:hint="输入项目药房查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="预约注射日期"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:id="@+id/fragment_patient_info_injectDateRL"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/fragment_patient_info_injectStartDateText"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/fragment_patient_info_injectEndDateText"
+                    android:layout_marginRight="24px"
+                    android:layout_toRightOf="@+id/fragment_patient_info_injectStartDateText"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@drawable/calendar"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="预约注射时间"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:id="@+id/fragment_patient_info_injectTimeRL"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/fragment_patient_info_injectStartTimeText"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/fragment_patient_info_injectEndTimeText"
+                    android:layout_marginRight="24px"
+                    android:layout_toRightOf="@+id/fragment_patient_info_injectStartTimeText"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text333333"
+                    android:textSize="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:src="@drawable/calendar"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="姓      名"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_userNameEditText"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:hint="输入姓名查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="联系方式"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/fragment_patient_info_userCallEditText"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:hint="输入联系方式查询"
+                android:paddingLeft="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="30px"
+            android:layout_marginRight="30px"
+            android:layout_width="match_parent"
+            android:layout_height="100px">
+
+            <TextView
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:text="申请状态"
+                android:textColor="@color/text555555"
+                android:textSize="30px"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fragment_patient_info_applyForStutas"
+                android:layout_marginRight="24px"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/text333333"
+                android:textSize="30px"
+                android:drawableRight="@drawable/xiala"
+                android:background="@drawable/shape_edit_text_bg"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/fragment_patient_info_applyForIntro"
+            android:layout_marginRight="30dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="80dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/text333333"
+            android:textSize="30px"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/fragment_patient_info_searchBtn"
+            android:layout_marginTop="30px"
+            android:text="查询"
+            android:textColor="@color/white"
+            android:textSize="34px"
+            android:gravity="center"
+            android:background="@drawable/shape_kcfl_pressed"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="70px"
+            android:layout_marginRight="70px"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="70px" />
+    </com.zhy.autolayout.AutoLinearLayout>
+</ScrollView>

@@ -11,4 +11,7 @@ public class GloableConstant {
     public static final String LOGINPHONE = "loginphone";
     public static final String LOGINPWD = "loginpwd";
     public static final String PATIENTPHONE = "patientPhone";
+    public static final String PATIENT_NAME_DETAIL ="patient_name_detail" ;
+    public static final String HUJINGUID = "huijinguid";
+    public static final String DING_URL = "ding_url";
 }

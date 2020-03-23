@@ -35,14 +35,4 @@ public abstract class BaseActivity extends AutoLayoutActivity {
     protected abstract void initListener();
 
     protected abstract void initData();
-
-    /**
-     * 退出应用
-     */
-    public void exitApp() {
-
-        android.os.Process.killProcess(android.os.Process.myPid());
-
-        System.exit(0);
-    }
 }

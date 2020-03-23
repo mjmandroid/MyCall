@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.v4.app.NotificationCompat;
 
-
 import com.it.fan.mycall.R;
 
 import java.lang.reflect.Field;

@@ -24,8 +24,9 @@ import android.widget.Toast;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.fragment.CallRecordFragment;
+import com.it.fan.mycall.fragment.ClaimFragment;
+import com.it.fan.mycall.fragment.PatientInfoQueryFragment;
 import com.it.fan.mycall.fragment.PlayCallFragment;
-import com.it.fan.mycall.service.KeepLiveService;
 import com.it.fan.mycall.service.TracePhoneService;
 import com.it.fan.mycall.util.CallUtil;
 import com.it.fan.mycall.util.LogUtils;
@@ -45,7 +46,7 @@ public class MainActivity extends AutoLayoutActivity {
     private EditText textAmount;
     private GridView gridView;
 
-    private String[] mTitles = {"拨号", "话单记录"};
+    private String[] mTitles = {"拨号", "话单记录","患者信息查询"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private SegmentTabLayout mTablayout;
     final public static int REQUEST_CODE_ASK_CALL_PHONE=123;
@@ -60,6 +61,7 @@ public class MainActivity extends AutoLayoutActivity {
         super.onCreate(savedInstanceState);
         Utility.setActionBar(this, R.color.text999999);
         setContentView(R.layout.activity_main);
+        requestPermiss();
         initView();
         initListener();
         initData();
@@ -70,7 +72,7 @@ public class MainActivity extends AutoLayoutActivity {
     protected void onResume() {
         super.onResume();
         if(!isdialogshow)
-        requestPermiss(needPermissions);
+            requestPermiss(needPermissions);
     }
 
     private void requestPermiss(String... permissions) {
@@ -86,6 +88,33 @@ public class MainActivity extends AutoLayoutActivity {
         }
     }
 
+
+
+    private void initView() {
+        mTablayout = (SegmentTabLayout) findViewById(R.id.activity_main_tabLayout);
+
+        /*textAmount = (EditText) findViewById(R.id.textAmount);
+        mVirtualKeyBoard = (VirtualKeyboardView) findViewById(R.id.virtualKeyboardView);
+        //设置不调用系统键盘
+        if (Build.VERSION.SDK_INT<=10){
+            textAmount.setInputType(InputType.TYPE_NULL);
+        }else {
+            this.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            try {
+                Class<EditText> cls = EditText.class;
+                Method setShowSoftInputOnFocus;
+                setShowSoftInputOnFocus = cls.getMethod("setShowSoftInputOnFocus",
+                        boolean.class);
+                setShowSoftInputOnFocus.setAccessible(true);
+                setShowSoftInputOnFocus.invoke(textAmount, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        gridView = mVirtualKeyBoard.getGridView();*/
+
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -99,16 +128,6 @@ public class MainActivity extends AutoLayoutActivity {
         }
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
-    private void initView() {
-        mTablayout = (SegmentTabLayout) findViewById(R.id.activity_main_tabLayout);
-
-    }
-
-    private void initListener() {
-
-    }
-
     private void startService(){
         Intent intent = new Intent(this, TracePhoneService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -118,11 +137,17 @@ public class MainActivity extends AutoLayoutActivity {
         }
     }
 
+    private void initListener() {
+
+    }
+
     private void initData() {
         //valueList = mVirtualKeyBoard.getValueList();
         mFragments.clear();
         mFragments.add(new PlayCallFragment());
         mFragments.add(new CallRecordFragment());
+        mFragments.add(new PatientInfoQueryFragment());
+        //mFragments.add(new ClaimFragment());
         mTablayout.setTabData(mTitles,this,R.id.activity_main_contentFrame,mFragments);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             startService();
@@ -148,7 +173,6 @@ public class MainActivity extends AutoLayoutActivity {
         }
         return needRequestPermissonList;
     }
-
     /**
      * 检测是否说有的权限都已经授权
      *
@@ -164,7 +188,6 @@ public class MainActivity extends AutoLayoutActivity {
         }
         return true;
     }
-
     private void showMissingPermissionDialog() {
         isdialogshow = true;
         LogUtils.loge("showMissingPermissionDialog","showMissingPermissionDialog");
@@ -194,7 +217,6 @@ public class MainActivity extends AutoLayoutActivity {
 
         builder.show();
     }
-
     public void exitApp() {
 
         android.os.Process.killProcess(android.os.Process.myPid());

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <EditText
+            android:id="@+id/fragment_claim_editText"
+            android:background="@drawable/shape_edit_text_bg"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="8dp"
+            android:layout_marginLeft="18dp"
+            android:textSize="16sp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/fragment_claim_enterText"
+            android:text="进入网站"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <WebView
+        android:id="@+id/fragment_claim_webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
+</LinearLayout>

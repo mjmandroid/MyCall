@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 android {
     compileSdkVersion 28
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '28.0.1'
 
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -49,6 +49,8 @@ artifacts {
 dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:recyclerview-v7:27.0.1'
+    implementation ('com.android.support:recyclerview-v7:28.+'){
+        //exclude group: 'com.android.support'
+    }
     implementation 'com.zhy:autolayout:1.4.5'
 }

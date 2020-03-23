@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.it.fan.mycall.R;
@@ -34,7 +33,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import cn.qqtheme.framework.picker.DateTimePicker;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -229,22 +227,20 @@ public class CallRecordFragment extends BaseFragment {
     private void selectDate(final TextView textView) {
 
 
-        DateTimePicker picker = new DateTimePicker(getActivity(), DateTimePicker.HOUR_24);
-        picker.setDateRangeStart(2017, 2, 27);
-        picker.setDateRangeEnd(2050, 11, 11);
-        picker.setTimeRangeStart(0, 0);
-        picker.setTimeRangeEnd(23, 59);
-        picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
-            @Override
-            public void onDateTimePicked(String year, String month, String day, String hour, String minute) {
-                //showToast(year + "-" + month + "-" + day + " " + hour + ":" + minute);
-                String time = year + "-" + month + "-" + day + " " + hour + ":" + minute+":00";
-                textView.setText(time);
-            }
-        });
+//        DateTimePicker picker = new DateTimePicker(getActivity(), DateTimePicker.HOUR_24);
+//        picker.setDateRangeStart(2017, 2, 27);
+//        picker.setDateRangeEnd(2050, 11, 11);
+//        picker.setTimeRangeStart(0, 0);
+//        picker.setTimeRangeEnd(23, 59);
+//        picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
+//            @Override
+//            public void onDateTimePicked(String year, String month, String day, String hour, String minute) {
+//                //showToast(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+//                String time = year + "-" + month + "-" + day + " " + hour + ":" + minute+":00";
+//                textView.setText(time);
+//            }
+//        });
 //        picker.show();
-
-
         MDatePickerDialog dialog = new MDatePickerDialog.Builder(getContext())
                 .setCanceledTouchOutside(true)
                 .setGravity(Gravity.BOTTOM)

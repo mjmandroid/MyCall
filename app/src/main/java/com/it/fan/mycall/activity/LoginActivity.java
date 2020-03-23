@@ -12,14 +12,11 @@ import com.it.fan.mycall.R;
 import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.LoginResultBean;
 import com.it.fan.mycall.gloable.GloableConstant;
-import com.it.fan.mycall.receiver.NotificationClickReceiver;
 import com.it.fan.mycall.service.MessageCountService;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.BrageUtil;
 import com.it.fan.mycall.util.GlobalUtil;
 import com.it.fan.mycall.util.JsonCallback;
-import com.it.fan.mycall.util.LogUtils;
-import com.it.fan.mycall.util.NotificationUtils;
 import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.view.ProgressHUD;
 import com.lzy.okgo.OkGo;
@@ -61,6 +58,7 @@ public class LoginActivity extends BaseActivity {
             mUserName.setText(phone);
             mUserPwd.setText(pwd);
         }
+
         //ShortcutBadger.applyCount(this, 5);
     }
 
@@ -95,16 +93,12 @@ public class LoginActivity extends BaseActivity {
             GlobalUtil.shortToast(this, "密码不能为空");
             return;
         }
+        //jump2MainActivity();
         mLoadingDialog = ProgressHUD.show(this, getString(R.string.txt_loading_mes));
         OkGo.post(Api.LOGIN)
                 .params("attachePhone", userMobile)
                 .params("password", paw)
-                /*.execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        System.out.println(s);
-                    }
-                });*/
+
                 .execute(new JsonCallback<BaseBean<LoginResultBean>>() {
 
                     @Override
@@ -116,6 +110,8 @@ public class LoginActivity extends BaseActivity {
                                 SpUtil.SaveString(LoginActivity.this, GloableConstant.USERNAME,baseBean.getData().getUserName());
                                 SpUtil.SaveString(LoginActivity.this,GloableConstant.LOGINPHONE,userMobile);
                                 SpUtil.SaveString(LoginActivity.this,GloableConstant.LOGINPWD,paw);
+                                SpUtil.SaveString(LoginActivity.this,GloableConstant.HUJINGUID,baseBean.getData().getHujingUid());
+                                SpUtil.SaveString(LoginActivity.this,GloableConstant.DING_URL,baseBean.getData().getDing_url());
                                 jump2MainActivity();
                             }else {
                                 Toast.makeText(LoginActivity.this,baseBean.getMsg(),Toast.LENGTH_SHORT).show();

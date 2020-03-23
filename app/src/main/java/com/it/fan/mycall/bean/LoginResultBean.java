@@ -14,6 +14,27 @@ public class LoginResultBean {
 
     private String userName;
 
+    private String hujingUid;
+
+    private String ding_url;
+
+
+    public String getHujingUid() {
+        return hujingUid;
+    }
+
+    public void setHujingUid(String hujingUid) {
+        this.hujingUid = hujingUid;
+    }
+
+    public String getDing_url() {
+        return ding_url;
+    }
+
+    public void setDing_url(String ding_url) {
+        this.ding_url = ding_url;
+    }
+
     public String getAttacheTrue() {
         return attacheTrue;
     }
