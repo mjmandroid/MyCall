@@ -2,6 +2,7 @@ package com.it.fan.mycall.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,9 @@ import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.view.VirtualKeyBoardPop;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +49,11 @@ import static android.R.attr.data;
  * Created by fan on 2019/6/2.
  */
 
-public class AllCallFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class AllCallFragment extends BaseFragment {
     @BindView(R.id.fragment_all_call_recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.fragment_all_call_swipeLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    SmartRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.fragment_all_call_showNum)
     ImageView mShowNum;
 
@@ -72,7 +76,15 @@ public class AllCallFragment extends BaseFragment implements SwipeRefreshLayout.
 
     @Override
     protected void initListener() {
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                isPullToRef = true;
+
+                mAdapter.setEnableLoadMore(false);
+                getData();
+            }
+        });
         //取消动画效果，防止画面闪烁
         ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -157,7 +169,6 @@ public class AllCallFragment extends BaseFragment implements SwipeRefreshLayout.
                                         //处理一下数据给数据分类
                                         mAdapter.setNewData(mlist);
                                         mAdapter.notifyDataSetChanged();
-                                        mSwipeRefreshLayout.setRefreshing(false);
                                         mAdapter.setEnableLoadMore(true);
                                     }else {
                                         if (mlist.size() < 15) {
@@ -169,18 +180,18 @@ public class AllCallFragment extends BaseFragment implements SwipeRefreshLayout.
                                         //adapter.setEnableLoadMore(false);
                                         //adapter.loadMoreEnd(true);
                                         mSwipeRefreshLayout.setEnabled(true);
-
                                     }
 
-                                    mSwipeRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }
+                        mSwipeRefreshLayout.finishRefresh();
                     }
 
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        mSwipeRefreshLayout.finishRefresh();
                     }
                 });
     }
@@ -191,13 +202,6 @@ public class AllCallFragment extends BaseFragment implements SwipeRefreshLayout.
         pop.showPopupWindow();
     }
 
-    @Override
-    public void onRefresh() {
-        isPullToRef = true;
-
-        mAdapter.setEnableLoadMore(false);
-        getData();
-    }
 
     @Override
     public void onResume() {

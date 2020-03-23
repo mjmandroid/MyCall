@@ -7,6 +7,8 @@ import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.store.PersistentCookieStore;
 
+import okhttp3.logging.HttpLoggingInterceptor;
+
 /**
  * Created by fan on 2019/6/4.
  */
@@ -37,7 +39,9 @@ public class MyApp extends Application {
 //                .setCookieStore(new MemoryCookieStore())            //cookie使用内存缓存（app退出后，cookie消失）
                 .setCookieStore(new PersistentCookieStore());        //cookie持久化存储，如果cookie不过期，则一直有效
 //
-
+        final HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkGo.getInstance().getOkHttpClientBuilder().addInterceptor(loggingInterceptor);
 
     }
 }

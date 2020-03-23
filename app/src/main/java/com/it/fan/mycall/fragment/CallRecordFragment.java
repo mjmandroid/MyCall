@@ -13,6 +13,7 @@ import com.it.fan.mycall.R;
 import com.it.fan.mycall.adapter.CallRecordAdapter;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.util.SpUtil;
+import com.it.fan.mycall.view.ProgressHUD;
 import com.it.fan.mycall.view.QueryTypePop;
 import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.CallRecordBean;
@@ -161,7 +162,7 @@ public class CallRecordFragment extends BaseFragment {
         String realCalled = mRealCalled.getText().toString().trim();
         startTime = mStartTime.getText().toString().trim();
         endTime = mEndTime.getText().toString().trim();
-
+        final ProgressHUD loadDialog = ProgressHUD.show(getContext(), getContext().getResources().getString(R.string.loading));
 
 //        if (TextUtils.isEmpty(realCaller)) {
 //            GlobalUtil.shortToast(getActivity(), "真实主叫不能为空");
@@ -186,6 +187,7 @@ public class CallRecordFragment extends BaseFragment {
                 .execute(new JsonCallback<BaseBean<CallRecordListBean>>() {
                     @Override
                     public void onSuccess(BaseBean<CallRecordListBean> baseBean, Call call, Response response) {
+                        loadDialog.dismiss();
                         if (baseBean !=null){
                             if (baseBean.getResult()== 0){
                                 mHeaderView.setVisibility(View.VISIBLE);
@@ -220,6 +222,7 @@ public class CallRecordFragment extends BaseFragment {
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        loadDialog.dismiss();
                     }
                 });
     }

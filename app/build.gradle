@@ -89,4 +89,6 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-21'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }
