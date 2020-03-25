@@ -61,7 +61,6 @@ public class MainActivity extends AutoLayoutActivity {
         super.onCreate(savedInstanceState);
         Utility.setActionBar(this, R.color.text999999);
         setContentView(R.layout.activity_main);
-        requestPermiss();
         initView();
         initListener();
         initData();
@@ -135,6 +134,7 @@ public class MainActivity extends AutoLayoutActivity {
         } else {
             this.startService(intent);
         }
+        LogUtils.loge("","startService");
     }
 
     private void initListener() {

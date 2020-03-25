@@ -31,6 +31,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.widget.RemoteViews;
+
+import com.it.fan.mycall.R;
 
 import java.util.Random;
 
@@ -89,6 +92,27 @@ public class NotificationUtils extends ContextWrapper {
                 .setContentIntent(pendingIntent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Notification.Builder getChannelPhoneNotification(String title, String content, int icon, Intent intent) {
+        //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
+        PendingIntent pendingIntent = null;
+        if(intent != null){
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        RemoteViews remoteViews = getRemoteViews();
+        Notification.Builder builder = new Notification.Builder(context, id)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(icon)
+                .setAutoCancel(false)
+                .setOngoing(false)
+                .setContent(remoteViews);
+        if(pendingIntent != null){
+            builder.setContentIntent(pendingIntent);
+        }
+        return builder;
+    }
+
     public NotificationCompat.Builder getNotification_25(String title, String content, int icon, Intent intent) {
         //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -102,6 +126,27 @@ public class NotificationUtils extends ContextWrapper {
                 .setContentIntent(pendingIntent);
     }
 
+    public NotificationCompat.Builder getPhoneNotification_25(String title, String content, int icon, Intent intent) {
+        //PendingIntent.FLAG_UPDATE_CURRENT 这个类型才能传值
+        PendingIntent pendingIntent = null;
+        if(intent != null){
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        RemoteViews remoteViews = getRemoteViews();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(icon)
+                .setContent(remoteViews)
+                .setAutoCancel(false)
+                .setOngoing(false)
+                .setVibrate(new long[]{0});
+        if(pendingIntent != null){
+            builder.setContentIntent(pendingIntent);
+        }
+        return builder;
+    }
+
     public static void sendNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent) {
         NotificationUtils notificationUtils = new NotificationUtils(context);
         Notification notification;
@@ -110,6 +155,18 @@ public class NotificationUtils extends ContextWrapper {
             notification = notificationUtils.getChannelNotification(title, content, icon, intent).build();
         } else {
             notification = notificationUtils.getNotification_25(title, content, icon, intent).build();
+        }
+        notificationUtils.getManager().notify(new Random().nextInt(10000), notification);
+    }
+
+    public static void sendPhoneNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent){
+        NotificationUtils notificationUtils = new NotificationUtils(context);
+        Notification notification;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationUtils.createNotificationChannel();
+            notification = notificationUtils.getChannelPhoneNotification(title, content, icon, intent).build();
+        } else {
+            notification = notificationUtils.getPhoneNotification_25(title, content, icon, intent).build();
         }
         notificationUtils.getManager().notify(new Random().nextInt(10000), notification);
     }
@@ -136,6 +193,15 @@ public class NotificationUtils extends ContextWrapper {
             return NotificationManagerCompat.from(context).getImportance() != NotificationManager.IMPORTANCE_NONE;
         }
         return NotificationManagerCompat.from(context).areNotificationsEnabled();
+    }
+
+    private RemoteViews getRemoteViews() {
+
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.remote_view_phone_ring_layout);//RemoteView传入布局
+        remoteViews.setTextViewText(R.id.tv_left, "开始");//通过id-内容的方式设置remoteview中控件的内容，底层实现是通过Binder跨进程通信
+        remoteViews.setTextViewText(R.id.tv_right, "跳转");
+        remoteViews.setImageViewResource(R.id.icon, R.drawable.login_logo);//设置图片样式
+        return remoteViews;
     }
 
     /**

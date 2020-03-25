@@ -54,18 +54,16 @@ public class TracePhoneService extends Service {
                 }
             }
         },PhoneStateListener.LISTEN_CALL_STATE);
-
+//        sendNofity();
         return START_STICKY;
     }
 
     private void sendNofity() {
         LogUtils.loge("nofify","aaaaaaaaaaaaaaaaaaaaaaaaa");
-        Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-        intent.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-        NotificationUtils.sendNotification(getApplicationContext(),
+        NotificationUtils.sendPhoneNotification(getApplicationContext(),
                 "assa",
                 "sdsdsdsdsdsdsdsdsd00",
                 R.mipmap.ic_launcher,
-                intent);
+                null);
     }
 }
