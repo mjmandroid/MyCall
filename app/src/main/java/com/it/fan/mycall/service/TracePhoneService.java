@@ -54,7 +54,7 @@ public class TracePhoneService extends Service {
                 }
             }
         },PhoneStateListener.LISTEN_CALL_STATE);
-//        sendNofity();
+        sendNofity();
         return START_STICKY;
     }
 
