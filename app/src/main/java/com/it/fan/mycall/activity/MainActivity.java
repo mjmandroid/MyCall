@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +20,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyco.tablayout.SegmentTabLayout;
+import com.gyf.immersionbar.ImmersionBar;
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.fragment.CallRecordFragment;
 import com.it.fan.mycall.fragment.ClaimFragment;
+import com.it.fan.mycall.fragment.ContactsFragment;
 import com.it.fan.mycall.fragment.PatientInfoQueryFragment;
 import com.it.fan.mycall.fragment.PlayCallFragment;
 import com.it.fan.mycall.service.TracePhoneService;
@@ -45,11 +51,13 @@ public class MainActivity extends AutoLayoutActivity {
     private ArrayList<Map<String, String>> valueList;
     private EditText textAmount;
     private GridView gridView;
+    private TextView tv_title;
 
     private String[] mTitles = {"拨号", "话单记录","患者信息查询"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private SegmentTabLayout mTablayout;
+//    private SegmentTabLayout mTablayout;
     final public static int REQUEST_CODE_ASK_CALL_PHONE=123;
+    private Fragment mContent;
     private boolean isdialogshow = false;
     protected String[] needPermissions = {
             android.Manifest.permission.READ_PHONE_STATE,
@@ -59,8 +67,9 @@ public class MainActivity extends AutoLayoutActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utility.setActionBar(this, R.color.text999999);
-        setContentView(R.layout.activity_main);
+        ImmersionBar.with(this).transparentStatusBar().statusBarDarkFont(true).init();
+//        Utility.setActionBar(this, R.color.text999999);
+        setContentView(R.layout.activity_main_layout);
         initView();
         initListener();
         initData();
@@ -90,28 +99,18 @@ public class MainActivity extends AutoLayoutActivity {
 
 
     private void initView() {
-        mTablayout = (SegmentTabLayout) findViewById(R.id.activity_main_tabLayout);
-
-        /*textAmount = (EditText) findViewById(R.id.textAmount);
-        mVirtualKeyBoard = (VirtualKeyboardView) findViewById(R.id.virtualKeyboardView);
-        //设置不调用系统键盘
-        if (Build.VERSION.SDK_INT<=10){
-            textAmount.setInputType(InputType.TYPE_NULL);
-        }else {
-            this.getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            try {
-                Class<EditText> cls = EditText.class;
-                Method setShowSoftInputOnFocus;
-                setShowSoftInputOnFocus = cls.getMethod("setShowSoftInputOnFocus",
-                        boolean.class);
-                setShowSoftInputOnFocus.setAccessible(true);
-                setShowSoftInputOnFocus.invoke(textAmount, false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        gridView = mVirtualKeyBoard.getGridView();*/
+//        mTablayout = (SegmentTabLayout) findViewById(R.id.activity_main_tabLayout);
+        tv_title = findViewById(R.id.tv_title);
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tv_title.getLayoutParams();
+        lp.topMargin = Utility.getStatusBarHeight(this)+Utility.dip2px(this,15);
+        tv_title.setLayoutParams(lp);
+        mFragments.clear();
+        mFragments.add(new PlayCallFragment());
+        mFragments.add(new CallRecordFragment());
+        mFragments.add(new ContactsFragment());
+        mFragments.add(new PatientInfoQueryFragment());
+        mContent = mFragments.get(0);
+        commitFragment(R.id.fl_fragment_content,mContent);
 
     }
     @Override
@@ -138,17 +137,38 @@ public class MainActivity extends AutoLayoutActivity {
     }
 
     private void initListener() {
+        RadioGroup radioGroup = findViewById(R.id.main_tab_group);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.rb_call:
+                        switchContent(mFragments.get(0));
+                        tv_title.setText("拨号");
+                        break;
+                    case R.id.rb_record:
+                        switchContent(mFragments.get(1));
+                        tv_title.setText("话单记录");
+                        break;
+                    case R.id.rb_contracts:
+                        switchContent(mFragments.get(2));
+                        tv_title.setText("通讯录");
+                        break;
+                    case R.id.rb_search:
+                        switchContent(mFragments.get(3));
+                        tv_title.setText("患者信息查询");
+                        break;
 
+                }
+            }
+        });
     }
 
     private void initData() {
         //valueList = mVirtualKeyBoard.getValueList();
-        mFragments.clear();
-        mFragments.add(new PlayCallFragment());
-        mFragments.add(new CallRecordFragment());
-        mFragments.add(new PatientInfoQueryFragment());
+
         //mFragments.add(new ClaimFragment());
-        mTablayout.setTabData(mTitles,this,R.id.activity_main_contentFrame,mFragments);
+//        mTablayout.setTabData(mTitles,this,R.id.activity_main_contentFrame,mFragments);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             startService();
         }
@@ -230,4 +250,31 @@ public class MainActivity extends AutoLayoutActivity {
         intent.setData(Uri.parse("package:" + getPackageName()));
         startActivity(intent);
     }
+
+    /**
+     * 切换tab页面
+     *
+     * @param fragment 要显示的fragment
+     */
+    public void switchContent(Fragment fragment) {
+        if (mContent != fragment) {
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction();
+            if (!fragment.isAdded()) {
+                transaction.add(R.id.fl_fragment_content, fragment);
+            }
+            transaction.hide(mContent).show(fragment)
+                    .commitAllowingStateLoss();
+
+            mContent = fragment;
+        }
+    }
+
+    private void commitFragment(int layoutId, Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction();
+        transaction.replace(layoutId, fragment);
+        transaction.commit();
+    }
+
 }

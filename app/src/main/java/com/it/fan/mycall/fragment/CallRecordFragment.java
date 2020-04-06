@@ -22,6 +22,7 @@ import com.it.fan.mycall.bean.QueryTypeBean;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.GlobalUtil;
 import com.it.fan.mycall.util.JsonCallback;
+import com.it.fan.mycall.view.ScreenCallRecordPop;
 import com.it.fan.mycall.view.date.MDatePickerDialog;
 import com.lzy.okgo.OkGo;
 
@@ -74,6 +75,7 @@ public class CallRecordFragment extends BaseFragment {
     private int loadMorepageNum =1;
     private TextView mCountText;
     private View mHeaderView;
+    private ScreenCallRecordPop mScreenCallRecordPop;
 
     @Override
     protected int getLayout() {
@@ -117,6 +119,16 @@ public class CallRecordFragment extends BaseFragment {
                     }
                 });
 
+            }
+        });
+        rootView.findViewById(R.id.btn_saixuan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mScreenCallRecordPop == null){
+                    mScreenCallRecordPop = new ScreenCallRecordPop(getContext());
+                    mScreenCallRecordPop.setBackgroundColor(0x0);
+                }
+                mScreenCallRecordPop.showPopupWindow(rootView.findViewById(R.id.h_line));
             }
         });
     }

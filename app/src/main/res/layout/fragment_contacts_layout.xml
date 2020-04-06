@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_layout"
+        android:layout_width="match_parent"
+        app:srlEnableOverScrollBounce="true"
+        app:srlEnableOverScrollDrag="true"
+        app:srlEnablePureScrollMode="true"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_marginTop="5dp" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    <com.mcxtzhang.indexlib.IndexBar.widget.IndexBar
+        android:id="@+id/indexBar"
+        android:layout_width="24dp"
+        android:layout_marginTop="83dp"
+        android:layout_marginBottom="83dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+
+        app:indexBarPressBackground="@color/partTranslucent"
+        app:indexBarTextSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvSideBarHint"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_side_bar_bg"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="48sp"
+        android:visibility="gone"
+        tools:text="A"
+        android:layout_centerInParent="true"
+        tools:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/iv_add"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/icon_add"/>
+</RelativeLayout>

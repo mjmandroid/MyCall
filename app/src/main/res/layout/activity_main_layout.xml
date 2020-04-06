@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f5f5f5">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="拨号"
+            android:layout_marginBottom="15dp"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/fl_fragment_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <RadioGroup
+        android:id="@+id/main_tab_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="#f6f6f6"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/rb_call"
+            style="@style/MainRadioButton"
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/rb_call_selector"
+            android:drawablePadding="5dp"
+            android:checked="true"
+            android:text="拨号" />
+        <RadioButton
+            android:id="@+id/rb_record"
+            style="@style/MainRadioButton"
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/rb_record_selector"
+            android:drawablePadding="5dp"
+            android:text="话单记录" />
+        <RadioButton
+            android:id="@+id/rb_contracts"
+            style="@style/MainRadioButton"
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/rb_constract_selector"
+            android:drawablePadding="5dp"
+            android:text="通讯录" />
+        <RadioButton
+            android:id="@+id/rb_search"
+            style="@style/MainRadioButton"
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/rb_search_selector"
+            android:drawablePadding="5dp"
+            android:text="患者信息查询" />
+
+    </RadioGroup>
+</LinearLayout>

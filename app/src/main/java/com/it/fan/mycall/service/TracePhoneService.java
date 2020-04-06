@@ -32,6 +32,12 @@ public class TracePhoneService extends Service {
         String id = "com.xunjoy.zhipuzi.deliveryman".hashCode() + "";
         Notification notification = new NotificationCompat.Builder(this, id).build();
         startForeground(100, notification);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                sendNofity();
+            }
+        },1000*3);
     }
 
 
@@ -54,16 +60,16 @@ public class TracePhoneService extends Service {
                 }
             }
         },PhoneStateListener.LISTEN_CALL_STATE);
-        sendNofity();
+
         return START_STICKY;
     }
 
     private void sendNofity() {
-        LogUtils.loge("nofify","aaaaaaaaaaaaaaaaaaaaaaaaa");
         NotificationUtils.sendPhoneNotification(getApplicationContext(),
-                "assa",
-                "sdsdsdsdsdsdsdsdsd00",
-                R.mipmap.ic_launcher,
+                "",
+                "【卫爱续航】北京朝阳医院-张小华-本人-备注" +
+                        "  正在拨打您的电话，请注意接听~",
+                R.drawable.login_logo,
                 null);
     }
 }

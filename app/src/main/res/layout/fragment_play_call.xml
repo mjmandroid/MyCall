@@ -5,26 +5,27 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.flyco.tablayout.SlidingTabLayout
-        android:id="@+id/fragment_play_call_tablayout"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/white"
-        tl:tl_textSelectColor="@color/blue"
-        tl:tl_textUnselectColor="@color/text999999"
-        tl:tl_indicator_color="@color/blue"
-        tl:tl_indicator_corner_radius="1.5dp"
-        tl:tl_indicator_height="3dp"
-        tl:tl_indicator_width="20dp"/>
+    <com.it.fan.mycall.view.MyTablayout
+        android:id="@+id/tabLayout"
+        android:layout_width="228dp"
+        android:layout_height="30dp"
+        tl:tb_CornerRadius="6dp"
+        tl:tb_text_size="13sp"
+        tl:tb_content_arr="全部通话,未接来电"
+        tl:tb_select_color="#0c6bbe"
+        tl:tb_unselect_color="#f1f5f8"
+        tl:tb_select_text_color="#ffffff"
+        tl:tb_unselect_text_color="#0C6BBE"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_gravity="center_horizontal"/>
     <View
         android:background="@color/divier"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_height="1dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_palay_call_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 </LinearLayout>

@@ -99,7 +99,7 @@ public class NotificationUtils extends ContextWrapper {
         if(intent != null){
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        RemoteViews remoteViews = getRemoteViews();
+        RemoteViews remoteViews = getRemoteViews(content);
         Notification.Builder builder = new Notification.Builder(context, id)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -132,7 +132,7 @@ public class NotificationUtils extends ContextWrapper {
         if(intent != null){
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        RemoteViews remoteViews = getRemoteViews();
+        RemoteViews remoteViews = getRemoteViews(content);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -195,11 +195,10 @@ public class NotificationUtils extends ContextWrapper {
         return NotificationManagerCompat.from(context).areNotificationsEnabled();
     }
 
-    private RemoteViews getRemoteViews() {
+    private RemoteViews getRemoteViews(String content) {
 
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.remote_view_phone_ring_layout);//RemoteView传入布局
-        remoteViews.setTextViewText(R.id.tv_left, "开始");//通过id-内容的方式设置remoteview中控件的内容，底层实现是通过Binder跨进程通信
-        remoteViews.setTextViewText(R.id.tv_right, "跳转");
+        remoteViews.setTextViewText(R.id.content, content);//通过id-内容的方式设置remoteview中控件的内容，底层实现是通过Binder跨进程通信
         remoteViews.setImageViewResource(R.id.icon, R.drawable.login_logo);//设置图片样式
         return remoteViews;
     }
