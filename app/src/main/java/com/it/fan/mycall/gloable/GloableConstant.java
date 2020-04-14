@@ -14,4 +14,5 @@ public class GloableConstant {
     public static final String PATIENT_NAME_DETAIL ="patient_name_detail" ;
     public static final String HUJINGUID = "huijinguid";
     public static final String DING_URL = "ding_url";
+    public static final String ACTION_FINISH_ACTIVITY = "action_finish_activity";
 }

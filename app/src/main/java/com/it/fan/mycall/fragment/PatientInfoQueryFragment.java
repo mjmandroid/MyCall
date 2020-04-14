@@ -17,7 +17,12 @@ import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.StringUtil;
 import com.it.fan.mycall.view.ApplyForPop;
 import com.it.fan.mycall.view.PatientInfoPop;
+import com.it.fan.mycall.view.date.MDatePickerDialog;
 import com.lzy.okgo.OkGo;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,61 +99,82 @@ public class PatientInfoQueryFragment extends BaseFragment {
 
 
     private void startDatePicker() {
-        DatePicker datePicker = new DatePicker(getActivity(), DatePicker.YEAR_MONTH_DAY);
+        String title = "";
         if (dateCount % 2 == 0) {
             //选择开始日期
-            datePicker.setTitleText("选择开始日期");
+            title = "选择开始日期";
             isStartDate = true;
         }else {
             //选择结束日期
-            datePicker.setTitleText("选择结束日期");
+            title = "选择结束日期";
             isStartDate = false;
         }
 
+        MDatePickerDialog dialog = new MDatePickerDialog.Builder(getContext())
+                .setCanceledTouchOutside(true)
+                .setGravity(Gravity.BOTTOM)
+                .setSupportTime(false)
+                .setTwelveHour(false)
+                .setTitle(title)
+                .setCanceledTouchOutside(false)
+                .setOnDateResultListener(new MDatePickerDialog.OnDateResultListener() {
+                    @Override
+                    public void onDateResult(long date) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(date);
+                        SimpleDateFormat dateFormat = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+                        dateFormat.applyPattern("yyyy-MM-dd");
 
-        datePicker.setRangeStart(2017, 9, 1);
-        datePicker.setRangeEnd(2060, 9, 1);
-        datePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
-            @Override
-            public void onDatePicked(String year, String month, String day) {
-                String date= year + "-" + month + "-" + day;
-                dateCount++;
-                if (isStartDate){
-                    mInjectStartDateText.setText(date);
-                }else {
-                    mInjectEndDateText.setText("至"+date);
-                }
-            }
-        });
-        datePicker.show();
+                        dateCount++;
+                        if (isStartDate){
+                            mInjectStartDateText.setText(dateFormat.format(new Date(date)));
+                        }else {
+                            mInjectEndDateText.setText("至"+dateFormat.format(new Date(date)));
+                        }
+                    }
+                })
+                .build();
+        dialog.show();
 
     }
 
     private void startTimePicker() {
-        TimePicker picker = new TimePicker(getActivity(), TimePicker.HOUR_24);
+        String title = null;
         if (timeCount % 2 == 0) {
             //选择开始日期
-            picker.setTitleText("选择开始时间");
+            title = "选择开始时间";
             isStartTime = true;
         }else {
             //选择结束日期
-
-            picker.setTitleText("选择结束时间");
+            title = "选择结束时间";
             isStartTime = false;
         }
-        picker.setOnTimePickListener(new TimePicker.OnTimePickListener() {
-            @Override
-            public void onTimePicked(String hour, String minute) {
-                String time = hour + ":" + minute;
-                timeCount++;
-                if (isStartTime){
-                    mInjectStartTimeText.setText(time);
-                }else {
-                    mInjectEndTimeText.setText("至"+time);
-                }
-            }
-        });
-        picker.show();
+        MDatePickerDialog dialog = new MDatePickerDialog.Builder(getContext())
+                .setCanceledTouchOutside(true)
+                .setGravity(Gravity.BOTTOM)
+                .setSupportTime(true)
+                .setTwelveHour(false)
+                .setDisShowDate(true)
+                .setTitle(title)
+                .setCanceledTouchOutside(false)
+                .setOnDateResultListener(new MDatePickerDialog.OnDateResultListener() {
+                    @Override
+                    public void onDateResult(long date) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(date);
+                        SimpleDateFormat dateFormat = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
+                        dateFormat.applyPattern("HH:mm");
+
+                        timeCount++;
+                        if (isStartTime){
+                            mInjectStartTimeText.setText(dateFormat.format(new Date()));
+                        }else {
+                            mInjectEndTimeText.setText("至"+dateFormat.format(new Date()));
+                        }
+                    }
+                })
+                .build();
+        dialog.show();
 
     }
 
@@ -165,7 +191,7 @@ public class PatientInfoQueryFragment extends BaseFragment {
                 break;
             case R.id.fragment_patient_info_applyForStutas:
                 ApplyForPop pop = new ApplyForPop(getContext());
-                pop.setPopupGravity(BasePopupWindow.GravityMode.RELATIVE_TO_ANCHOR,Gravity.TOP);
+//                pop.setPopupGravity(BasePopupWindow.GravityMode.RELATIVE_TO_ANCHOR,Gravity.TOP);
                 pop.setOnQueryTypeSelectedListener(new ApplyForPop.OnQueryTypeSelectedListener() {
                     @Override
                     public void onItemClicked(String bean,int position) {

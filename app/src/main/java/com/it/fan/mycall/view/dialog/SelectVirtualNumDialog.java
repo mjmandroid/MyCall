@@ -14,17 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.adapter.VirtualNumAdapter;
 import com.it.fan.mycall.base.BaseDialogFragment;
+import com.it.fan.mycall.bean.VirtualPhoneBean;
+import com.it.fan.mycall.util.CallUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SelectVirtualNumDialog extends BaseDialogFragment implements VirtualNumAdapter.Callback {
+public class SelectVirtualNumDialog extends BaseDialogFragment {
 
     private RecyclerView mRecyclerView;
     private VirtualNumAdapter virtualNumAdapter;
+    private TextView tv_call;
+    private String phoneNum;
 
     @Nullable
     @Override
@@ -43,6 +52,7 @@ public class SelectVirtualNumDialog extends BaseDialogFragment implements Virtua
                 dismiss();
             }
         });
+        tv_call = view.findViewById(R.id.tv_call);
         mRecyclerView = view.findViewById(R.id.recyclerView);
         setCancelable(false);
         initView();
@@ -52,16 +62,33 @@ public class SelectVirtualNumDialog extends BaseDialogFragment implements Virtua
     private void initView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        virtualNumAdapter = new VirtualNumAdapter(this);
-        test();
+        virtualNumAdapter = new VirtualNumAdapter();
+        initData();
         mRecyclerView.setAdapter(virtualNumAdapter);
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                VirtualPhoneBean bean = virtualNumAdapter.getData().get(position);
+                CallUtil.call(getActivity(),phoneNum,bean.getAttacheVitrual(),bean.getConfigId());
+                dismiss();
+            }
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                super.onItemChildClick(adapter, view, position);
+            }
+        });
     }
 
-    private void test() {
-        List<String> data = virtualNumAdapter.getData();
-        for (int i = 0; i < 3; i++) {
-            data.add(i+"");
+    private void initData() {
+        Bundle bundle = getArguments();
+        ArrayList<VirtualPhoneBean> datas = (ArrayList<VirtualPhoneBean>) bundle.getSerializable("list");
+        if(datas != null && datas.size() > 0){
+            virtualNumAdapter.setNewData(datas);
         }
+        phoneNum = bundle.getString("phoneNum");
+        tv_call.setText("呼叫  "+ phoneNum);
+
     }
 
     @Override
@@ -88,8 +115,4 @@ public class SelectVirtualNumDialog extends BaseDialogFragment implements Virtua
             super.show(manager, tag);
     }
 
-    @Override
-    public void onItemClick(View view) {
-        dismiss();
-    }
 }

@@ -4,8 +4,30 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:hint="搜索"
+            android:textColor="#333333"
+            android:textColorHint="#919191"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:drawableLeft="@mipmap/ic_search_g"
+            android:paddingLeft="5dp"
+            android:background="@drawable/shape_contact_search"/>
+    </FrameLayout>
+
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/smart_layout"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         app:srlEnableOverScrollBounce="true"
         app:srlEnableOverScrollDrag="true"

@@ -2,6 +2,7 @@ package com.it.fan.mycall.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -153,7 +154,7 @@ public class VirtualKeyboardView extends RelativeLayout implements View.OnClickL
     private void call() {
         String amount = mEditText.getText().toString().trim();
         if (amount.length() > 0) {
-            CallUtil.call(context,amount);
+            CallUtil.showSelectVirtualDialog((FragmentActivity) getContext(),amount);
         }else {
             Toast.makeText(context,"请输入电话号码",Toast.LENGTH_SHORT).show();
         }

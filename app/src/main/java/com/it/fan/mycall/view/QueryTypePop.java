@@ -61,6 +61,12 @@ public class QueryTypePop extends BasePopupWindow {
                 dismiss();
             }
         });
+        findViewById(R.id.view_blur).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
 

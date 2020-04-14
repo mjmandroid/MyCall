@@ -33,11 +33,13 @@ import com.it.fan.mycall.fragment.ClaimFragment;
 import com.it.fan.mycall.fragment.ContactsFragment;
 import com.it.fan.mycall.fragment.PatientInfoQueryFragment;
 import com.it.fan.mycall.fragment.PlayCallFragment;
+import com.it.fan.mycall.service.JobSchedulerService;
 import com.it.fan.mycall.service.TracePhoneService;
 import com.it.fan.mycall.util.CallUtil;
 import com.it.fan.mycall.util.LogUtils;
 import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.VirtualKeyboardView;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.zhy.autolayout.AutoLayoutActivity;
 
 import java.lang.reflect.Method;
@@ -61,6 +63,7 @@ public class MainActivity extends AutoLayoutActivity {
     private boolean isdialogshow = false;
     protected String[] needPermissions = {
             android.Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CALL_LOG,
             android.Manifest.permission.CALL_PHONE,
     };
 
@@ -127,10 +130,15 @@ public class MainActivity extends AutoLayoutActivity {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     private void startService(){
-        Intent intent = new Intent(this, TracePhoneService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.startForegroundService(intent);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Intent intent = new Intent(this, JobSchedulerService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                this.startService(intent);
+            }
         } else {
+            Intent intent = new Intent(this, TracePhoneService.class);
             this.startService(intent);
         }
         LogUtils.loge("","startService");

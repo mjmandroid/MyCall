@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.it.fan.mycall.view.VirtualKeyBoardPop;
 import com.it.fan.mycall.view.dialog.SelectVirtualNumDialog;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.request.PostRequest;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -64,6 +66,7 @@ public class AllCallFragment extends BaseFragment {
     private boolean isPullToRef = true;
     private int pageNum =1;
     private int loadMorepageNum =1;
+    private String configId = "";
 
     private List<AllCallBean> mlist = new ArrayList<>();
     private MyAllCallAdapter mAdapter;
@@ -86,7 +89,7 @@ public class AllCallFragment extends BaseFragment {
                 isPullToRef = true;
 
                 mAdapter.setEnableLoadMore(false);
-                getData();
+                getData("");
             }
         });
         //取消动画效果，防止画面闪烁
@@ -109,7 +112,7 @@ public class AllCallFragment extends BaseFragment {
                         mSwipeRefreshLayout.setEnabled(false);
                         //adapter.loadMoreEnd(true);//true is gone,false is visible
 
-                        getData();
+                        getData("");
 
 
                     }
@@ -124,7 +127,8 @@ public class AllCallFragment extends BaseFragment {
                 List<AllCallBean> data = mAdapter.getData();
                 if (data!=null){
                     AllCallBean allCallBean = data.get(position);
-                    CallUtil.call(getActivity(),allCallBean.getPatientPhone());
+//                    CallUtil.call(getActivity(),allCallBean.getPatientPhone());
+                    CallUtil.showSelectVirtualDialog(getActivity(),allCallBean.getPatientPhone());
                 }
             }
 
@@ -146,7 +150,17 @@ public class AllCallFragment extends BaseFragment {
 
     }
 
-    private void getData() {
+    public void classifyQuery(int configId){
+        if(configId == -1){
+            this.configId = "";
+        } else {
+            this.configId = String.valueOf(configId);
+        }
+        isPullToRef = true;
+        getData(this.configId);
+    }
+
+    private void getData(String configId) {
         if (isPullToRef){
             pageNum = 1;
             loadMorepageNum=1;
@@ -156,11 +170,21 @@ public class AllCallFragment extends BaseFragment {
         }
         String loginPhone = SpUtil.getString(getActivity(), GloableConstant.LOGINPHONE);
         //loginPhone = "18310676445";
-        OkGo.post(Api.ALLCALL)
-                .params("attachePhone",loginPhone)
-                .params("pageNumber",pageNum)
-                .params("pageSize",15)
-                .execute(new JsonCallback<BaseBean<BaseAllCallBean>>() {
+        PostRequest request = null;
+        if(TextUtils.isEmpty(configId)){
+            request = OkGo.post(Api.GETALLCALL)
+                    .params("attacheTrue", loginPhone)
+                    .params("pageNumber", pageNum)
+                    .params("pageSize", 15);
+        } else {
+            request = OkGo.post(Api.GETALLCALL)
+                    .params("attacheTrue",loginPhone)
+                    .params("pageNumber",pageNum)
+                    .params("pageSize",15)
+                    .params("proId",configId);
+        }
+
+        request.execute(new JsonCallback<BaseBean<BaseAllCallBean>>() {
                     @Override
                     public void onSuccess(BaseBean<BaseAllCallBean> baseBean, Call call, Response response) {
                         if (baseBean !=null){
@@ -212,7 +236,7 @@ public class AllCallFragment extends BaseFragment {
         super.onResume();
         isPullToRef = true;
         mAdapter.setEnableLoadMore(false);
-        getData();
+        getData("");
 
     }
 }

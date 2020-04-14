@@ -64,6 +64,7 @@ public class MDatePickerDialog extends Dialog implements MPickerView.OnSelectLis
     private int mConfirmTextColor;
     private int mCancelTextColor;
     private OnDateResultListener mOnDateResultListener;
+    private boolean disShowDate;
 
     private MDatePickerDialog(@NonNull Context context) {
         super(context);
@@ -188,7 +189,11 @@ public class MDatePickerDialog extends Dialog implements MPickerView.OnSelectLis
             tvDialogTopConfirm.setVisibility(View.GONE);
             llDialog.setBackgroundResource(R.drawable.dialog_date_picker_center_bg);
         }
-
+        if(disShowDate){
+            mpvDialogYear.setVisibility(View.GONE);
+            mpvDialogMonth.setVisibility(View.GONE);
+            mpvDialogDay.setVisibility(View.GONE);
+        }
         if (isSupportTime) {
             mpvDialogHour.setVisibility(View.VISIBLE);
             mpvDialogMinute.setVisibility(View.VISIBLE);
@@ -307,6 +312,7 @@ public class MDatePickerDialog extends Dialog implements MPickerView.OnSelectLis
         private boolean isCanceledTouchOutside;
         private boolean isSupportTime;
         private boolean isTwelveHour;
+        private boolean disShowDate;
         private float mConfirmTextSize;
         private float mCancelTextSize;
         private int mConfirmTextColor;
@@ -324,6 +330,11 @@ public class MDatePickerDialog extends Dialog implements MPickerView.OnSelectLis
 
         public Builder setGravity(int mGravity) {
             this.mGravity = mGravity;
+            return this;
+        }
+
+        public Builder setDisShowDate(boolean disShowDate){
+            this.disShowDate = disShowDate;
             return this;
         }
 
@@ -372,6 +383,7 @@ public class MDatePickerDialog extends Dialog implements MPickerView.OnSelectLis
             dialog.mCancelTextColor = this.mCancelTextColor;
             dialog.isCanceledTouchOutside = this.isCanceledTouchOutside;
             dialog.mOnDateResultListener = this.mOnDateResultListener;
+            dialog.disShowDate = this.disShowDate;
         }
 
         public MDatePickerDialog build() {

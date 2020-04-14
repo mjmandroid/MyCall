@@ -2,6 +2,7 @@ package com.it.fan.mycall.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.CallUtil;
 import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.SpUtil;
+import com.it.fan.mycall.view.ProgressHUD;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 
@@ -80,7 +82,8 @@ public class CallDetailActivity extends BaseActivity {
                 List<AllCallBean> data = mAdapter.getData();
                 if (data!=null){
                     AllCallBean allCallBean = data.get(position);
-                    CallUtil.call(CallDetailActivity.this,allCallBean.getPatientPhone());
+                    CallUtil.showSelectVirtualDialog(CallDetailActivity.this,allCallBean.getPatientPhone());
+//                    CallUtil.call(CallDetailActivity.this,allCallBean.getPatientPhone());
                 }
             }
         });
@@ -96,10 +99,11 @@ public class CallDetailActivity extends BaseActivity {
             loadMorepageNum++;
             pageNum = loadMorepageNum;
         }
+        final ProgressHUD progressHUD = ProgressHUD.show(this, "正在加载...");
         String loginPhone = SpUtil.getString(this, GloableConstant.LOGINPHONE);
-        OkGo.post(Api.CALLDETAIL)
-                .params("attachePhone", loginPhone)
-                .params("patientPhone", patientPhone)
+        OkGo.post(Api.CALL_DETAIL)
+                .params("attacheTrue", loginPhone)
+                .params("userPhone", patientPhone)
                 .params("pageNumber", 1)
                 .params("pageSize", 20)
                 .execute(new JsonCallback<BaseBean<BaseAllCallBean>>() {
@@ -113,11 +117,13 @@ public class CallDetailActivity extends BaseActivity {
 
                             }
                         }
+                        progressHUD.dismiss();
                     }
 
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        progressHUD.dismiss();
                     }
                 });
     }

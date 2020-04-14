@@ -1,13 +1,13 @@
 package com.it.fan.mycall.bean;
 
-import com.mcxtzhang.indexlib.IndexBar.bean.BaseIndexPinyinBean;
-
-public class ContactBean extends BaseIndexPinyinBean {
-
-    private int id;
+public class RingBean {
     private int configId;
+    private String configName;
+    private String proId;
+    private String proName;
     private long createTime;
     private int deleteFlag;
+    private int id;
     private String userDoctor;
     private String userHospital;
     private String userLabel;
@@ -16,8 +16,6 @@ public class ContactBean extends BaseIndexPinyinBean {
     private String userPrefix;
     private String userRemark;
     private String vitrualPhone;
-    private String proId;
-    private String proName;
 
     public String getProId() {
         return proId;
@@ -35,20 +33,20 @@ public class ContactBean extends BaseIndexPinyinBean {
         this.proName = proName;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getConfigId() {
         return configId;
     }
 
     public void setConfigId(int configId) {
         this.configId = configId;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
     }
 
     public long getCreateTime() {
@@ -65,6 +63,14 @@ public class ContactBean extends BaseIndexPinyinBean {
 
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUserDoctor() {
@@ -129,10 +135,5 @@ public class ContactBean extends BaseIndexPinyinBean {
 
     public void setVitrualPhone(String vitrualPhone) {
         this.vitrualPhone = vitrualPhone;
-    }
-
-    @Override
-    public String getTarget() {
-        return userName;
     }
 }

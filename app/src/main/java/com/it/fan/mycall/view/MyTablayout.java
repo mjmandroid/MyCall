@@ -229,6 +229,18 @@ public class MyTablayout extends View {
         invalidate();
     }
 
+    public void restoreArrow(String leftContent,String rightContent){
+        isLeftArrow = false;
+        isRightArrow = false;
+        if(!TextUtils.isEmpty(leftContent)){
+            contentArr[0] = leftContent;
+        }
+        if(!TextUtils.isEmpty(rightContent)){
+            contentArr[1] = rightContent;
+        }
+        invalidate();
+    }
+
     public void setmCallbck(TableLayoutCallbck mCallbck) {
         this.mCallbck = mCallbck;
     }

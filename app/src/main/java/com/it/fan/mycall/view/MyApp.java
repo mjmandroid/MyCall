@@ -6,6 +6,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.store.PersistentCookieStore;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -15,12 +16,17 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MyApp extends Application {
 
+    private static MyApp mInstance = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        mInstance = this;
            /*配置okgo*/
         OkGo.init(this);
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
+
+        CrashReport.initCrashReport(getApplicationContext(), "49c70f5aca", false,strategy);
         //以下都不是必须的，根据需要自行选择,一般来说只需要 debug,缓存相关,cookie相关的 就可以了
         OkGo.getInstance()
                 //如果使用默认的 60秒,以下三行也不需要传
@@ -43,5 +49,9 @@ public class MyApp extends Application {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkGo.getInstance().getOkHttpClientBuilder().addInterceptor(loggingInterceptor);
 
+    }
+
+    public static MyApp getInstance(){
+        return mInstance;
     }
 }

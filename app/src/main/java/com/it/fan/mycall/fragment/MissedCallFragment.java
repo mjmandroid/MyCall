@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.it.fan.mycall.util.CallUtil;
 import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.SpUtil;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.PostRequest;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -52,6 +54,7 @@ public class MissedCallFragment extends BaseFragment {
     private boolean isPullToRef = true;
     private int pageNum = 1;
     private int loadMorepageNum = 1;
+    private String configId = "";
 
     private List<AllCallBean> mlist = new ArrayList<>();
     private MyAllCallAdapter mAdapter;
@@ -109,7 +112,7 @@ public class MissedCallFragment extends BaseFragment {
                 List<AllCallBean> data = mAdapter.getData();
                 if (data != null) {
                     AllCallBean allCallBean = data.get(position);
-                    CallUtil.call(getActivity(), allCallBean.getPatientPhone());
+                    CallUtil.showSelectVirtualDialog(getActivity(),allCallBean.getPatientPhone());
                 }
             }
 
@@ -126,6 +129,16 @@ public class MissedCallFragment extends BaseFragment {
         });
     }
 
+    public void classifyQuery(int configId){
+        if(configId == -1){
+            this.configId = "";
+        } else {
+            this.configId = String.valueOf(configId);
+        }
+        isPullToRef = true;
+        initData();
+    }
+
     @Override
     protected void initData() {
 
@@ -138,11 +151,14 @@ public class MissedCallFragment extends BaseFragment {
         }
         String loginPhone = SpUtil.getString(getActivity(), GloableConstant.LOGINPHONE);
         //loginPhone = "18310676445";
-        OkGo.post(Api.MISSEDCALL)
-                .params("attachePhone", loginPhone)
+        PostRequest request = OkGo.post(Api.GETMISSEDCALL)
+                .params("attacheTrue", loginPhone)
                 .params("pageNumber", pageNum)
-                .params("pageSize", 15)
-                .execute(new JsonCallback<BaseBean<BaseAllCallBean>>() {
+                .params("pageSize", 15);
+        if(!TextUtils.isEmpty(configId)){
+            request.params("proId",configId);
+        }
+                request.execute(new JsonCallback<BaseBean<BaseAllCallBean>>() {
                     @Override
                     public void onSuccess(BaseBean<BaseAllCallBean> baseBean, Call call, Response response) {
                         mSwipeRefreshLayout.finishRefresh();

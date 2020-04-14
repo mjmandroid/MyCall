@@ -14,6 +14,9 @@ import android.widget.PopupWindow;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.it.fan.mycall.R;
+import com.it.fan.mycall.bean.ConfigBean;
+
+import java.util.List;
 
 import razerdp.basepopup.BasePopupWindow;
 
@@ -21,19 +24,27 @@ import razerdp.basepopup.BasePopupWindow;
 public class CallTypePopupWindow extends BasePopupWindow {
 
     private RecyclerView recyclerView;
-    private BaseQuickAdapter<String, BaseViewHolder> adapter;
+    private BaseQuickAdapter<ConfigBean, BaseViewHolder> adapter;
     private MyTablayout tablayout;
     private int checkIndex = -1;
+    private List<ConfigBean> mConfigList;
+    private Callback mCallback;
 
-    public CallTypePopupWindow(Context context,final MyTablayout tablayout) {
+    public CallTypePopupWindow setmCallback(Callback mCallback) {
+        this.mCallback = mCallback;
+        return this;
+    }
+
+    public CallTypePopupWindow(Context context, final MyTablayout tablayout, List<ConfigBean> configBeanList) {
         super(context, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
         this.tablayout = tablayout;
+        this.mConfigList = configBeanList;
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_call_type_pop) {
+        adapter = new BaseQuickAdapter<ConfigBean, BaseViewHolder>(R.layout.item_call_type_pop) {
             @Override
-            protected void convert(final BaseViewHolder helper, String item) {
-                helper.setText(R.id.tv_type_name, item);
+            protected void convert(final BaseViewHolder helper, final ConfigBean item) {
+                helper.setText(R.id.tv_type_name, item.getProName());
                 if(checkIndex == helper.getAdapterPosition()){
                     helper.setTextColor(R.id.tv_type_name, Color.parseColor("#1C88E6"));
                 } else {
@@ -42,16 +53,20 @@ public class CallTypePopupWindow extends BasePopupWindow {
                 helper.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        tablayout.restoreArrow();
                         checkIndex = helper.getAdapterPosition();
                         notifyDataSetChanged();
+                        if(mCallback != null){
+                            mCallback.queryId(item);
+                        }
                         dismiss();
                     }
                 });
             }
         };
-        for (int i = 0; i < 5; i++) {
-            adapter.getData().add("全部电话");
+
+        if(mConfigList != null && mConfigList.size() > 0){
+            adapter.getData().add(new ConfigBean().setId(-1).setProName("全部"));
+            adapter.getData().addAll(mConfigList);
         }
         recyclerView.setAdapter(adapter);
         setOnDismissListener(new OnDismissListener() {
@@ -72,5 +87,9 @@ public class CallTypePopupWindow extends BasePopupWindow {
     @Override
     public View onCreateContentView() {
         return createPopupById(R.layout.layout_call_type_pop);
+    }
+
+    public interface Callback{
+        void queryId(ConfigBean bean);
     }
 }
