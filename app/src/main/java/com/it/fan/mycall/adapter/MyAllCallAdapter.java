@@ -1,6 +1,7 @@
 package com.it.fan.mycall.adapter;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -21,6 +22,9 @@ public class MyAllCallAdapter extends BaseQuickAdapter<AllCallBean,BaseViewHolde
     @Override
     protected void convert(BaseViewHolder helper, AllCallBean item) {
         helper.setText(R.id.item_all_call_phoneNum,item.getPatientPhone()+"("+item.getCallCount()+")");
+        if(!TextUtils.isEmpty(item.getUserNamePat())){
+            helper.setText(R.id.item_all_call_phoneNum,item.getUserNamePat()+"("+item.getCallCount()+")");
+        }
         helper.setText(R.id.item_all_call_time,item.getShowTime());
         helper.addOnClickListener(R.id.item_all_call_detail);
         //状态:1.专员未接听2.患者未接听3.回拨成功4.回拨不成功5.外呼成功6.呼入成功

@@ -16,6 +16,7 @@ import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.JsonCallback;
+import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.MyApp;
 import com.it.fan.mycall.view.ProgressHUD;
@@ -81,7 +82,9 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
-        OkGo.post(Api.CONFIG_INFO).execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
+        OkGo.post(Api.CONFIG_INFO)
+                .params("attacheTrue", SpUtil.getString(this,GloableConstant.ATTACHETRUE))
+                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
             @Override
             public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
                 configBeanList = listBaseBean.getData();
@@ -170,8 +173,8 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
                         if(objectBaseBean.getResult() == 0){
                             Toast.makeText(MyApp.getInstance(),"保存成功",Toast.LENGTH_SHORT).show();
                             finish();
-                            progressHUD.dismiss();
                         }
+                        progressHUD.dismiss();
                     }
 
                     @Override

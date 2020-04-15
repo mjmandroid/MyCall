@@ -137,7 +137,7 @@ public class NotificationUtils extends ContextWrapper {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(icon)
-                .setContent(remoteViews)
+                .setCustomContentView(remoteViews)
                 .setAutoCancel(false)
                 .setOngoing(false)
                 .setVibrate(new long[]{0});

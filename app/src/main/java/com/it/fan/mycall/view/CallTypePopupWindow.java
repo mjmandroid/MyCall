@@ -29,16 +29,18 @@ public class CallTypePopupWindow extends BasePopupWindow {
     private int checkIndex = -1;
     private List<ConfigBean> mConfigList;
     private Callback mCallback;
+    private String mDefaultItemName;
 
     public CallTypePopupWindow setmCallback(Callback mCallback) {
         this.mCallback = mCallback;
         return this;
     }
 
-    public CallTypePopupWindow(Context context, final MyTablayout tablayout, List<ConfigBean> configBeanList) {
+    public CallTypePopupWindow(Context context, final MyTablayout tablayout, List<ConfigBean> configBeanList,String mDefaultItemName) {
         super(context, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
         this.tablayout = tablayout;
         this.mConfigList = configBeanList;
+        this.mDefaultItemName = mDefaultItemName;
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BaseQuickAdapter<ConfigBean, BaseViewHolder>(R.layout.item_call_type_pop) {
@@ -65,7 +67,7 @@ public class CallTypePopupWindow extends BasePopupWindow {
         };
 
         if(mConfigList != null && mConfigList.size() > 0){
-            adapter.getData().add(new ConfigBean().setId(-1).setProName("全部"));
+            adapter.getData().add(new ConfigBean().setId(-1).setProName(mDefaultItemName));
             adapter.getData().addAll(mConfigList);
         }
         recyclerView.setAdapter(adapter);

@@ -9,9 +9,11 @@ import com.it.fan.mycall.R;
 import com.it.fan.mycall.adapter.MyFragmentPagerAdapter;
 import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.ConfigBean;
+import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.gloable.TableLayoutCallbck;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.JsonCallback;
+import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.view.CallTypePopupWindow;
 import com.it.fan.mycall.view.MyTablayout;
 import com.lzy.okgo.OkGo;
@@ -72,7 +74,7 @@ public class PlayCallFragment extends BaseFragment{
             public void arrow(boolean leftChecked, boolean isLeftArrow, boolean isRightArrow) {
                 if(isLeftArrow){
                     if(mCallTypeLeftPopupWindow == null){
-                        mCallTypeLeftPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList);
+                        mCallTypeLeftPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList,"全部通话");
                         mCallTypeLeftPopupWindow.setBackgroundColor(0x0);
                         mCallTypeLeftPopupWindow.setmCallback(new CallTypePopupWindow.Callback() {
                             @Override
@@ -86,7 +88,7 @@ public class PlayCallFragment extends BaseFragment{
                     mCallTypeLeftPopupWindow.showPopupWindow(mTabLayout);
                 } else if(isRightArrow){
                     if(mCallTypeRightPopupWindow == null){
-                        mCallTypeRightPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList);
+                        mCallTypeRightPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList,"未接来电");
                         mCallTypeRightPopupWindow.setBackgroundColor(0x0);
                         mCallTypeRightPopupWindow.setmCallback(new CallTypePopupWindow.Callback() {
                             @Override
@@ -126,6 +128,7 @@ public class PlayCallFragment extends BaseFragment{
     @Override
     protected void initData() {
         OkGo.post(Api.CONFIG_INFO)
+                .params("attacheTrue", SpUtil.getString(getActivity(), GloableConstant.ATTACHETRUE))
                 .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
                     @Override
                     public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {

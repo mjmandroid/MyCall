@@ -180,7 +180,9 @@ public class CallRecordFragment extends BaseFragment {
     }
 
     private void getProjectList() {
-        OkGo.post(Api.CONFIG_INFO).execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
+        OkGo.post(Api.CONFIG_INFO)
+                .params("attacheTrue", SpUtil.getString(getContext(),GloableConstant.ATTACHETRUE))
+                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
             @Override
             public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
                 configBeanList = listBaseBean.getData();

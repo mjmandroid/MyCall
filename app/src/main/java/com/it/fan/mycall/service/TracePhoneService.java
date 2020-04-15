@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,6 +15,12 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.bean.BaseBean;
@@ -25,6 +32,7 @@ import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.LogUtils;
 import com.it.fan.mycall.util.NotificationUtils;
 import com.it.fan.mycall.util.SpUtil;
+import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.MyApp;
 import com.lzy.okgo.OkGo;
 
@@ -35,6 +43,14 @@ public class TracePhoneService extends Service {
 
     private int loopCount = 0;
     private static final int MAX_SIZE = 5;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            sendNofity("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            Log.e("debug", "handleMessage: "+"aaaaaaaaaaaaaaaaaaaaa" );
+        }
+    };
 
     @Nullable
     @Override
@@ -53,11 +69,14 @@ public class TracePhoneService extends Service {
             Notification notification = NotificationUtils.createNotification(this,"mycall","正在后台运行中", R.drawable.login_logo,
                     intent);
             startForeground(1, notification);
+
 //            stopForeground(true);
         }
+//        handler.sendEmptyMessageDelayed(1,1000*10);
 //        String id = getPackageName().hashCode() + "";
 //        Notification notification = new NotificationCompat.Builder(this, id).build();
 //        startForeground(100, notification);
+        Log.e("debug", "onCreate: " );
     }
 
 
@@ -111,6 +130,7 @@ public class TracePhoneService extends Service {
                                         .append(ringBean.getUserRemark())
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
+                                Log.e("debug", "onSuccess: "+ ringBean.toString());
                                 sendNofity(showContent.toString());
                             } else if (ringBeanBaseBean.getResult() == 2) {
                                 StringBuilder showContent = new StringBuilder();
@@ -121,9 +141,16 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 sendNofity(showContent.toString());
+                                Log.e("debug", "onSuccess: "+ ringBean.toString());
                             } else {
                                 searchPhoneInfo(phoneNumber);
                             }
+                        }
+
+                        @Override
+                        public void onError(Call call, Response response, Exception e) {
+                            super.onError(call, response, e);
+                            searchPhoneInfo(phoneNumber);
                         }
                     });
         }
@@ -131,10 +158,46 @@ public class TracePhoneService extends Service {
     }
 
     private void sendNofity(String content) {
-        NotificationUtils.sendPhoneNotification(getApplicationContext(),
-                "",
-                content,
-                R.drawable.login_logo,
-                null);
+//        Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+//        NotificationUtils.sendPhoneNotification(getApplicationContext(),
+//                "",
+//                content,
+//                R.drawable.login_logo,
+//                intent);
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View notificationView = inflater
+                .inflate(R.layout.remote_view_phone_ring_layout, null);
+
+        final WindowManager mWindowManager = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+        wmParams.format = PixelFormat.RGBA_8888;
+        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+
+        wmParams.gravity = Gravity.LEFT|Gravity.TOP;
+
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.y = Utility.dip2px(this,50);
+        wmParams.windowAnimations = R.style.notification_animation;
+        try {
+            mWindowManager.addView(notificationView, wmParams);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        TextView tv_content = notificationView.findViewById(R.id.content);
+        tv_content.setText(content);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mWindowManager.removeView(notificationView);
+            }
+        },5000);
+
     }
 }

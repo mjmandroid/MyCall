@@ -136,4 +136,25 @@ public class RingBean {
     public void setVitrualPhone(String vitrualPhone) {
         this.vitrualPhone = vitrualPhone;
     }
+
+    @Override
+    public String toString() {
+        return "RingBean{" +
+                "configId=" + configId +
+                ", configName='" + configName + '\'' +
+                ", proId='" + proId + '\'' +
+                ", proName='" + proName + '\'' +
+                ", createTime=" + createTime +
+                ", deleteFlag=" + deleteFlag +
+                ", id=" + id +
+                ", userDoctor='" + userDoctor + '\'' +
+                ", userHospital='" + userHospital + '\'' +
+                ", userLabel='" + userLabel + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPhone='" + userPhone + '\'' +
+                ", userPrefix='" + userPrefix + '\'' +
+                ", userRemark='" + userRemark + '\'' +
+                ", vitrualPhone='" + vitrualPhone + '\'' +
+                '}';
+    }
 }

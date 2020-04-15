@@ -1,7 +1,6 @@
 package com.it.fan.mycall.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -12,20 +11,15 @@ import com.it.fan.mycall.R;
 import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.LoginResultBean;
 import com.it.fan.mycall.gloable.GloableConstant;
-import com.it.fan.mycall.service.MessageCountService;
 import com.it.fan.mycall.util.Api;
-import com.it.fan.mycall.util.BrageUtil;
 import com.it.fan.mycall.util.GlobalUtil;
 import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.view.ProgressHUD;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.leolin.shortcutbadger.ShortcutBadger;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -75,9 +69,9 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.activity_new_login_go)
     public void onViewClicked() {
-
         go2Login();
     }
+
 
     private void go2Login() {
         final String userMobile = mUserName.getText().toString().trim();

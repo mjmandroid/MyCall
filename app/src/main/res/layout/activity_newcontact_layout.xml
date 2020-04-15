@@ -177,9 +177,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:textColor="#1c87e5"
+                    android:textColor="#333333"
                     android:textSize="15sp"
-                    android:inputType="phone"
                     android:hint="请输入备注"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"/>
