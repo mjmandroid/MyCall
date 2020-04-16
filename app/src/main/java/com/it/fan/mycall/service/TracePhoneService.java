@@ -1,5 +1,6 @@
 package com.it.fan.mycall.service;
 
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
@@ -23,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.it.fan.mycall.R;
+import com.it.fan.mycall.activity.LockedScreenActivity;
 import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.RingBean;
 import com.it.fan.mycall.gloable.GloableConstant;
@@ -51,6 +54,7 @@ public class TracePhoneService extends Service {
             Log.e("debug", "handleMessage: "+"aaaaaaaaaaaaaaaaaaaaa" );
         }
     };
+
 
     @Nullable
     @Override
@@ -83,6 +87,7 @@ public class TracePhoneService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("debug", "onStartCommand:CALL_STATE_IDLE " );
+        final WindowManager mWindowManager = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         mTelephonyManager.listen(new PhoneStateListener() {
             @Override
@@ -92,6 +97,7 @@ public class TracePhoneService extends Service {
                         Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK://接听或者拨打
+                        Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
                         Log.e("debug", "onCallStateChanged:CALL_STATE_OFFHOOK "+phoneNumber );
                         break;
                     case TelephonyManager.CALL_STATE_RINGING://当前状态为响铃
@@ -176,8 +182,11 @@ public class TracePhoneService extends Service {
             wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
         wmParams.format = PixelFormat.RGBA_8888;
-        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 
         wmParams.gravity = Gravity.LEFT|Gravity.TOP;
 
@@ -197,7 +206,28 @@ public class TracePhoneService extends Service {
             public void run() {
                 mWindowManager.removeView(notificationView);
             }
-        },5000);
+        },8*1000);
+    }
 
+    public  boolean wakeUpAndUnlock(Context context){
+        //屏锁管理器
+        KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
+        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+        if(!km.isKeyguardLocked()){
+            return false;
+        }
+        //解锁
+        kl.disableKeyguard();
+        //获取电源管理器对象
+        PowerManager pm=(PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        //获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                PowerManager.SCREEN_DIM_WAKE_LOCK,"bright");
+        //点亮屏幕
+        wl.acquire();
+        //释放
+        wl.release();
+        return true;
     }
 }

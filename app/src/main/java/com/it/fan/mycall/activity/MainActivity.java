@@ -140,6 +140,20 @@ public class MainActivity extends AutoLayoutActivity {
         }
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE){
+            if(!Settings.canDrawOverlays(this)){
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        }
+    }
+
     private void startService(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             Intent intent = new Intent(this, JobSchedulerService.class);

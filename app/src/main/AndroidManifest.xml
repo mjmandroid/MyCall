@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.it.fan.mycall">
     <!-- 显示系统窗口权限 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 在 屏幕最顶部显示addview -->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
@@ -80,6 +81,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.EditContactActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LockedScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTransparent"/>
     </application>
 
 </manifest>

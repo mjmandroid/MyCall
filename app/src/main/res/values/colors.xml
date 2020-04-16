@@ -19,4 +19,5 @@
     <color name="text0c6bbe">#0c6bbe</color>
     <color name="bgColor_overlay">#60000000</color>
     <color name="partTranslucent">#39000000</color>
+    <color name="transparent">#00000000</color>
 </resources>
