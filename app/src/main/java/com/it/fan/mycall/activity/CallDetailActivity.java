@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.it.fan.mycall.adapter.MyAllCallAdapter;
 import com.it.fan.mycall.bean.AllCallBean;
 import com.it.fan.mycall.bean.BaseAllCallBean;
 import com.it.fan.mycall.bean.BaseBean;
+import com.it.fan.mycall.bean.ContactDetailInfo;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.CallUtil;
@@ -28,6 +30,7 @@ import com.it.fan.mycall.view.ProgressHUD;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +48,16 @@ public class CallDetailActivity extends BaseActivity {
     TextView mPhoneNum;
     @BindView(R.id.activity_call_detail_recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.btn_operate)
+    TextView btn_operate;
     private boolean isPullToRef = true;
     private int pageNum = 1;
     private int loadMorepageNum = 1;
     private CallDetailAdapter mAdapter;
     private List<AllCallBean> mlist = new ArrayList<>();
     private String patientPhone="";
+    private String virtualPhone="";
+    private AllCallBean info;
 
     @Override
     protected int getLayoutId() {
@@ -62,7 +69,18 @@ public class CallDetailActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(GloableConstant.PATIENTPHONE)){
             patientPhone = intent.getStringExtra(GloableConstant.PATIENTPHONE);
-            mPhoneNum.setText(patientPhone);
+            String showDetail = intent.getStringExtra(GloableConstant.CALL_DETAIL_SHOW);
+            if(TextUtils.isEmpty(showDetail)){
+                mPhoneNum.setText(patientPhone);
+            } else {
+                mPhoneNum.setText(showDetail);
+            }
+            String pro_name = intent.getStringExtra(GloableConstant.PRO_NAME);
+            if(!TextUtils.isEmpty(pro_name)){
+                btn_operate.setText("編輯联系人");
+            }
+            virtualPhone = intent.getStringExtra("virtualPhone");
+            info = (AllCallBean) intent.getSerializableExtra("info");
         }
     }
 
@@ -91,6 +109,24 @@ public class CallDetailActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        if(info != null){
+            OkGo.post(Api.CONTACT_DETAIL)
+                    .params("userPhone",patientPhone)
+                    .params("vitrualPhone",info.getVitrualPhone())
+                    .execute(new JsonCallback<BaseBean<ContactDetailInfo>>() {
+                        @Override
+                        public void onSuccess(BaseBean<ContactDetailInfo> bean, Call call, Response response) {
+                            ContactDetailInfo data = bean.getData();
+                            if(data != null){
+                                ContactDetailInfo.Detail addressOne = bean.getData().getAddressOne();
+                                if(addressOne != null){
+                                    info.id = String.valueOf(addressOne.getId());
+                                }
+                            }
+
+                        }
+                    });
+        }
 
         if (isPullToRef) {
             pageNum = 1;
@@ -102,7 +138,7 @@ public class CallDetailActivity extends BaseActivity {
         final ProgressHUD progressHUD = ProgressHUD.show(this, "正在加载...");
         String loginPhone = SpUtil.getString(this, GloableConstant.LOGINPHONE);
         OkGo.post(Api.CALL_DETAIL)
-                .params("attacheTrue", loginPhone)
+                .params("attacheTrue", virtualPhone)
                 .params("userPhone", patientPhone)
                 .params("pageNumber", 1)
                 .params("pageSize", 20)
@@ -129,8 +165,24 @@ public class CallDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.layout_common_title_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.layout_common_title_back,R.id.btn_operate})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.layout_common_title_back:
+                finish();
+                break;
+            case R.id.btn_operate:
+                if(btn_operate.getText().toString().equals("新建联系人")){
+                    Intent intent = new Intent(this,NewContactActivity.class);
+                    intent.putExtra("userPhone",patientPhone);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this,EditContactActivity.class);
+                    intent.putExtra("info2",info);
+                    startActivity(intent);
+                }
+                break;
+        }
+
     }
 }

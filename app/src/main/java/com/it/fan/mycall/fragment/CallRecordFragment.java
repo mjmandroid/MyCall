@@ -1,5 +1,6 @@
 package com.it.fan.mycall.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.it.fan.mycall.R;
+import com.it.fan.mycall.activity.RecordDetailActivity;
 import com.it.fan.mycall.adapter.CallRecordAdapter;
 import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.bean.TodayCallBean;
@@ -90,6 +92,7 @@ public class CallRecordFragment extends BaseFragment {
     private ScreenCallRecordPop mScreenCallRecordPop;
     private List<ConfigBean> configBeanList;
     private String proId = "";
+    private TextView tv_saixuan;
 
     @Override
     protected int getLayout() {
@@ -135,7 +138,8 @@ public class CallRecordFragment extends BaseFragment {
 
             }
         });
-        rootView.findViewById(R.id.btn_saixuan).setOnClickListener(new View.OnClickListener() {
+        tv_saixuan = rootView.findViewById(R.id.btn_saixuan);
+        tv_saixuan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mScreenCallRecordPop == null) {
@@ -144,13 +148,17 @@ public class CallRecordFragment extends BaseFragment {
                     mScreenCallRecordPop.setmItemSelectListener(new ScreenCallRecordPop.IItemSelectListener<ConfigBean>() {
                         @Override
                         public void onSelect(ConfigBean data) {
+                            tv_saixuan.setText(data.getProName());
                             getTodayData(data.getId());
                         }
                     });
                 }
-                mScreenCallRecordPop.showPopupWindow(rootView.findViewById(R.id.h_line));
+                int[] locations = new int[2];
+                rootView.findViewById(R.id.h_line).getLocationOnScreen(locations);
+                mScreenCallRecordPop.showPopupWindow(0,locations[1]);
             }
         });
+
     }
 
     @Override
@@ -193,9 +201,32 @@ public class CallRecordFragment extends BaseFragment {
 
     @OnClick({R.id.fragment_call_record_real_startTime, R.id.fragment_call_record_real_endTime,
             R.id.fragment_call_record_real_queryType, R.id.fragment_call_record_real_callStatus,
-            R.id.fragment_call_record_real_search, R.id.fragment_project_name})
+            R.id.fragment_call_record_real_search, R.id.fragment_project_name,
+            R.id.tv_call_in,R.id.tv_enter_num,
+            R.id.tv_call_out,R.id.tv_out_num,
+            R.id.tv_call_loss,R.id.tv_loss_num})
     public void onViewClicked(View view) {
+        Intent intent = null;
         switch (view.getId()) {
+            case R.id.tv_call_in:
+            case R.id.tv_enter_num:
+                intent = new Intent(getContext(), RecordDetailActivity.class);
+                intent.putExtra("type",GloableConstant.CALL_IN_TYPE);
+                getContext().startActivity(intent);
+                break;
+            case R.id.tv_call_out:
+            case R.id.tv_out_num:
+                intent = new Intent(getContext(), RecordDetailActivity.class);
+                intent.putExtra("type",GloableConstant.CALL_OUT_TYPE);
+                getContext().startActivity(intent);
+                break;
+            case R.id.tv_call_loss:
+            case R.id.tv_loss_num:
+                intent = new Intent(getContext(), RecordDetailActivity.class);
+                intent.putExtra("type",GloableConstant.CALL_LOSS_TYPE);
+                getContext().startActivity(intent);
+                break;
+
             case R.id.fragment_call_record_real_startTime:
                 selectDate(mStartTime);
                 break;
@@ -222,7 +253,9 @@ public class CallRecordFragment extends BaseFragment {
                         proId = data.getId()+"";
                     }
                 });
-                configPop.showPopupWindow(fragment_project_name);
+                int[] loc = new int[2];
+                fragment_project_name.getLocationOnScreen(loc);
+                configPop.showPopupWindow(0,loc[1]+fragment_project_name.getHeight());
                 break;
         }
     }

@@ -11,14 +11,20 @@ import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.it.fan.mycall.R;
+import com.it.fan.mycall.bean.AllCallBean;
 import com.it.fan.mycall.bean.BaseBean;
+import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.bean.ContactDetailInfo;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.JsonCallback;
+import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.MyApp;
+import com.it.fan.mycall.view.ScreenCallRecordPop;
 import com.lzy.okgo.OkGo;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -29,8 +35,8 @@ public class EditContactActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tv_title;
-    @BindView(R.id.et_project_name)
-    EditText et_project_name;
+    @BindView(R.id.tv_project_name)
+    TextView tv_project_name;
     @BindView(R.id.et_patient_name)
     EditText et_patient_name;
     @BindView(R.id.et_phone)
@@ -49,6 +55,9 @@ public class EditContactActivity extends BaseActivity {
     FrameLayout fl_other;
     private boolean[] flags = {true,false,false};
     private ContactDetailInfo.Detail mInfo;
+    private List<ConfigBean> configBeanList;
+    private ConfigBean mConfigBean;
+    private AllCallBean allCallBean;
 
     @Override
     protected int getLayoutId() {
@@ -70,10 +79,18 @@ public class EditContactActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        OkGo.post(Api.CONFIG_INFO)
+                .params("attacheTrue", SpUtil.getString(this,GloableConstant.ATTACHETRUE))
+                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
+                    @Override
+                    public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
+                        configBeanList = listBaseBean.getData();
+                    }
+                });
         if(getIntent() != null){
             mInfo = (ContactDetailInfo.Detail) getIntent().getSerializableExtra("info");
             if(mInfo != null){
-                et_project_name.setText(mInfo.getConfigName());
+                tv_project_name.setText(mInfo.getProName());
                 et_patient_name.setText(mInfo.getUserName());
                 et_phone.setText(mInfo.getUserPhone());
                 et_mark.setText(mInfo.getUserRemark());
@@ -87,11 +104,27 @@ public class EditContactActivity extends BaseActivity {
                     flags = new boolean[]{false,false,true};
                 }
                 changeState();
+            } else {
+                allCallBean = (AllCallBean) getIntent().getSerializableExtra("info2");
+                tv_project_name.setText(allCallBean.getProName());
+                et_patient_name.setText(allCallBean.getUserNamePat());
+                et_phone.setText(allCallBean.getUserPhone());
+                et_mark.setText(allCallBean.getUserRemark());
+                et_hospital.setText(allCallBean.getUserHospital());
+                et_doctor.setText(allCallBean.getUserDoctor());
+                if("本人".equals(allCallBean.getUserLabel())){
+                    flags = new boolean[]{true,false,false};
+                } else if("家属".equals(allCallBean.getUserLabel())){
+                    flags = new boolean[]{false,true,false};
+                } else {
+                    flags = new boolean[]{false,false,true};
+                }
+                changeState();
             }
         }
     }
 
-    @OnClick({R.id.iv_back,R.id.tv_back,R.id.fl_self,R.id.fl_home,R.id.fl_other,R.id.btn_save})
+    @OnClick({R.id.iv_back,R.id.tv_back,R.id.fl_self,R.id.fl_home,R.id.fl_other,R.id.btn_save,R.id.tv_project_name})
     public void onViewClick(View v){
         switch (v.getId()){
             case R.id.tv_back:
@@ -119,6 +152,21 @@ public class EditContactActivity extends BaseActivity {
             case R.id.btn_save:
                 save();
                 break;
+            case R.id.tv_project_name:
+                ScreenCallRecordPop configPop = new ScreenCallRecordPop(this, configBeanList,false);
+                configPop.setBackgroundColor(0x0);
+                configPop.setmItemSelectListener(new ScreenCallRecordPop.IItemSelectListener<ConfigBean>() {
+                    @Override
+                    public void onSelect(ConfigBean data) {
+                        tv_project_name.setText(data.getProName());
+                        mConfigBean = data;
+
+                    }
+                });
+                int[] los = new int[2];
+                tv_project_name.getLocationOnScreen(los);
+                configPop.showPopupWindow(0,los[1]+tv_project_name.getHeight());
+                break;
         }
     }
 
@@ -128,6 +176,10 @@ public class EditContactActivity extends BaseActivity {
         String userName = et_patient_name.getText().toString().trim();
         String userRemark = et_mark.getText().toString().trim();
         String label = "";
+        if(TextUtils.isEmpty(userPhone)){
+            Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(flags[0]){
             label = "本人";
         } else if(flags[1]){
@@ -135,13 +187,41 @@ public class EditContactActivity extends BaseActivity {
         } else if(flags[2]){
             label = "其他";
         }
+        if(mConfigBean != null){
+            if(TextUtils.isEmpty(mConfigBean.getVitrualPhone())){
+                Utility.showToast("没有关联此项目");
+                return;
+            }
+        }
         if(mInfo != null){
             OkGo.post(Api.CONTACT_INFO_SAVE)
                     .params("configId",mInfo.getConfigId())
-                    .params("proId",mInfo.getProId())
-                    .params("vitrualPhone",mInfo.getVitrualPhone())
+                    .params("proId",mConfigBean == null ? mInfo.getProId() : mConfigBean.getId()+"")
+                    .params("vitrualPhone",mConfigBean == null ? mInfo.getVitrualPhone() : mConfigBean.getVitrualPhone())
                     .params("userPhone",userPhone)
                     .params("id",mInfo.getId())
+                    .params("userDoctor",userDoctor)
+                    .params("userLabel",label)
+                    .params("userHospital",et_hospital.getText().toString().trim())
+                    .params("userName",userName)
+                    .params("userRemark",userRemark)
+                    .execute(new JsonCallback<BaseBean<Object>>() {
+                        @Override
+                        public void onSuccess(BaseBean<Object> objectBaseBean, Call call, Response response) {
+                            if(objectBaseBean.getResult() == 0){
+                                Toast.makeText(MyApp.getInstance(),"保存成功",Toast.LENGTH_SHORT).show();
+                                finish();
+                                sendBroadcast(new Intent(GloableConstant.ACTION_FINISH_ACTIVITY));
+                            }
+                        }
+                    });
+        } else if(allCallBean != null){
+            OkGo.post(Api.CONTACT_INFO_SAVE)
+                    .params("configId",allCallBean.getConfigId())
+                    .params("proId",mConfigBean == null ? allCallBean.getProId() : mConfigBean.getId()+"")
+                    .params("vitrualPhone",mConfigBean == null ? allCallBean.getVitrualPhone() : mConfigBean.getVitrualPhone())
+                    .params("userPhone",userPhone)
+                    .params("id",allCallBean.id)
                     .params("userDoctor",userDoctor)
                     .params("userLabel",label)
                     .params("userHospital",et_hospital.getText().toString().trim())

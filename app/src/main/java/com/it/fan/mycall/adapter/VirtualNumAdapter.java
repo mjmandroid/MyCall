@@ -22,7 +22,7 @@ public class VirtualNumAdapter extends BaseQuickAdapter<VirtualPhoneBean,BaseVie
         TextView tv_name = helper.getView(R.id.tv_name);
         TextView tv_phone = helper.getView(R.id.tv_phone);
         ImageView iv_call = helper.getView(R.id.iv_call);
-        tv_name.setText(item.getUserName());
+        tv_name.setText(item.getProName());
         tv_phone.setText(item.getAttacheVitrual());
         int position = helper.getAdapterPosition();
         if(position < call_icon_res.length){

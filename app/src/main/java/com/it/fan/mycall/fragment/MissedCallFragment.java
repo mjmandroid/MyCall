@@ -121,8 +121,30 @@ public class MissedCallFragment extends BaseFragment {
                 AllCallBean allCallBean = mAdapter.getData().get(position);
                 String patientPhone = allCallBean.getPatientPhone();
                 if (view.getId() == R.id.item_all_call_detail) {
+                    StringBuilder sb = new StringBuilder();
+                    if(!TextUtils.isEmpty(allCallBean.getProName())){
+                        sb.append(allCallBean.getProName());
+                    }
+                    if(!TextUtils.isEmpty(allCallBean.getUserNamePat())){
+                        sb.append("-").append(allCallBean.getUserNamePat());
+                    }
+                    if(!TextUtils.isEmpty(allCallBean.getUserLabel())){
+                        sb.append("-").append(allCallBean.getUserLabel());
+                    }
+                    if(!TextUtils.isEmpty(allCallBean.getUserRemark())){
+                        sb.append("-").append(allCallBean.getUserRemark());
+                    }
+                    if(TextUtils.isEmpty(sb.toString())){
+                        sb.append(patientPhone);
+                    } else {
+                        sb.append("-").append(patientPhone);
+                    }
                     Intent intent = new Intent(getActivity(), CallDetailActivity.class);
                     intent.putExtra(GloableConstant.PATIENTPHONE, patientPhone);
+                    intent.putExtra(GloableConstant.CALL_DETAIL_SHOW,sb.toString());
+                    intent.putExtra(GloableConstant.PRO_NAME,allCallBean.getProName());
+                    intent.putExtra("virtualPhone",allCallBean.getAttacheVitrual());
+                    intent.putExtra("info",allCallBean);
                     startActivity(intent);
                 }
             }

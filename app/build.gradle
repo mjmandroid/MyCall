@@ -19,6 +19,11 @@ android {
             // 设置支持的SO库架构
             abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
+        if("${ENV}".equalsIgnoreCase("ONLINE")){
+            buildConfigField  "String","configEnv","\"https://apionline.mdmooc.org/hzzc\""
+        } else if("${ENV}".equalsIgnoreCase("TEST")){
+            buildConfigField  "String","configEnv","\"https://test.mdmooc.org/hzzcc\""
+        }
     }
     buildTypes {
         debug {
@@ -29,6 +34,7 @@ android {
             zipAlignEnabled false
             shrinkResources false
             signingConfig signingConfigs.debug
+
         }
         release {
             minifyEnabled false
@@ -47,7 +53,8 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->  // each 改为 all
 //                    def fileName = "Allsale_${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
-                    def fileName = "MyCall_${defaultConfig.versionName}.apk"
+                    def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
+                    def fileName = "MyCall_${defaultConfig.versionName}_${createTime}.apk"
                     def outFile = output.outputFile
                     if (outFile != null && outFile.name.endsWith('.apk')) {
                         outputFileName = fileName  //  output.outputFile 改为 outputFileName

@@ -2,6 +2,7 @@ package com.it.fan.mycall.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -18,7 +19,17 @@ public class ContactAdapter extends BaseQuickAdapter<ContactBean,BaseViewHolder>
 
     @Override
     protected void convert(final BaseViewHolder helper, final ContactBean item) {
-        helper.setText(R.id.tv_name,item.getUserName());
+        String contentItem = item.getUserName();
+        if(!TextUtils.isEmpty(item.getUserLabel())){
+            contentItem += "-"+item.getUserLabel();
+        }
+        if(!TextUtils.isEmpty(item.getUserRemark())){
+            contentItem += "-"+item.getUserRemark();
+        }
+        if(!TextUtils.isEmpty(item.getProName())){
+            contentItem += "-"+item.getProName();
+        }
+        helper.setText(R.id.tv_name,contentItem);
         View line = helper.getView(R.id.line);
         int position = helper.getAdapterPosition();
         String pinyin = item.getBaseIndexPinyin();

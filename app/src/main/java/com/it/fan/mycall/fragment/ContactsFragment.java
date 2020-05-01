@@ -17,6 +17,7 @@ import com.it.fan.mycall.R;
 import com.it.fan.mycall.activity.NewContactActivity;
 import com.it.fan.mycall.adapter.ContactAdapter;
 import com.it.fan.mycall.bean.BaseBean;
+import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.bean.ContactBean;
 import com.it.fan.mycall.bean.ContactBeanWrapper;
 import com.it.fan.mycall.gloable.GloableConstant;
@@ -84,6 +85,26 @@ public class ContactsFragment extends BaseFragment {
         }
     }
 
+    public void selectItem(ConfigBean data){
+        if(data.getId() == -1){
+            mDecoration.setmDatas(mList);
+            adapter.setNewData(mList);
+        } else {
+            List<ContactBean> tempList = new ArrayList<>();
+            for (ContactBean bean : mList) {
+                if(!TextUtils.isEmpty(bean.getProId())){
+                    if(bean.getProId().equals(data.getId()+"")){
+                        tempList.add(bean);
+                    }
+                }
+            }
+            indexBar.setmSourceDatas(tempList)
+                    .invalidate();
+            mDecoration.setmDatas(tempList);
+            adapter.setNewData(tempList);
+        }
+    }
+
     @Override
     protected void initListener() {
         rootView.findViewById(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
@@ -109,7 +130,9 @@ public class ContactsFragment extends BaseFragment {
                 if(!TextUtils.isEmpty(search_str)){
                     List<ContactBean> data = adapter.getData();
                     for (int i = 0; i < data.size(); i++) {
-                        if(data.get(i).getUserName().contains(search_str)){
+                        ContactBean bean = data.get(i);
+                        String content = bean.getUserName()+bean.getUserLabel()+bean.getUserRemark()+bean.getProName();
+                        if(content.contains(search_str)){
                             linearLayoutManager.scrollToPositionWithOffset(i,0);
                             break;
                         }

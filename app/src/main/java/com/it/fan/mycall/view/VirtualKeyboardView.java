@@ -38,6 +38,7 @@ public class VirtualKeyboardView extends RelativeLayout implements View.OnClickL
     private RelativeLayout mDelete;
     private ImageView mBack;
     private ImageView mCall;
+    private View view_top;
 
     public VirtualKeyboardView(Context context) {
         this(context,null);
@@ -55,9 +56,11 @@ public class VirtualKeyboardView extends RelativeLayout implements View.OnClickL
         mDelete = view.findViewById(R.id.layout_virtual_keyboard_delete);
         mCall = view.findViewById(R.id.layout_virtual_keyboard_call);
         mBack = view.findViewById(R.id.layout_virtual_keyboard_back);
+        view_top= view.findViewById(R.id.view_top);
         mDelete.setOnClickListener(this);
         mBack.setOnClickListener(this);
         mCall.setOnClickListener(this);
+        view_top.setOnClickListener(this);
         initValueList();
 
         setupView();
@@ -147,6 +150,9 @@ public class VirtualKeyboardView extends RelativeLayout implements View.OnClickL
 
             case R.id.layout_virtual_keyboard_call:
                 call();
+                break;
+            case R.id.view_top:
+                if (mListener!=null)mListener.onBack();
                 break;
         }
     }

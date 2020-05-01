@@ -19,7 +19,7 @@ public class CallRecordAdapter extends BaseQuickAdapter<CallRecordBean,BaseViewH
     @Override
     protected void convert(BaseViewHolder helper, CallRecordBean item) {
         helper.setText(R.id.item_call_date,item.getShowTime());
-        helper.setText(R.id.item_config_name,item.getConfigName());
+        helper.setText(R.id.item_config_name,item.getProName());
         helper.setText(R.id.item_username,item.getUserNamePat());
         helper.setText(R.id.item_real_phone,item.getPatientPhone());
         helper.setText(R.id.item_call_duration,item.getCallTime());

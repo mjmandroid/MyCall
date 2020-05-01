@@ -14,6 +14,7 @@ import com.it.fan.mycall.gloable.TableLayoutCallbck;
 import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.SpUtil;
+import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.CallTypePopupWindow;
 import com.it.fan.mycall.view.MyTablayout;
 import com.lzy.okgo.OkGo;
@@ -75,6 +76,8 @@ public class PlayCallFragment extends BaseFragment{
                 if(isLeftArrow){
                     if(mCallTypeLeftPopupWindow == null){
                         mCallTypeLeftPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList,"全部通话");
+                        mCallTypeLeftPopupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                        mCallTypeLeftPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
                         mCallTypeLeftPopupWindow.setBackgroundColor(0x0);
                         mCallTypeLeftPopupWindow.setmCallback(new CallTypePopupWindow.Callback() {
                             @Override
@@ -85,11 +88,15 @@ public class PlayCallFragment extends BaseFragment{
                             }
                         });
                     }
-                    mCallTypeLeftPopupWindow.showPopupWindow(mTabLayout);
+                    int [] locations = new int[2];
+                    mTabLayout.getLocationOnScreen(locations);
+                    mCallTypeLeftPopupWindow.showPopupWindow(0,locations[1]+mTabLayout.getHeight());
                 } else if(isRightArrow){
                     if(mCallTypeRightPopupWindow == null){
                         mCallTypeRightPopupWindow = new CallTypePopupWindow(getActivity(),mTabLayout,configBeanList,"未接来电");
                         mCallTypeRightPopupWindow.setBackgroundColor(0x0);
+                        mCallTypeRightPopupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                        mCallTypeRightPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
                         mCallTypeRightPopupWindow.setmCallback(new CallTypePopupWindow.Callback() {
                             @Override
                             public void queryId(ConfigBean bean) {
@@ -99,7 +106,9 @@ public class PlayCallFragment extends BaseFragment{
                             }
                         });
                     }
-                    mCallTypeRightPopupWindow.showPopupWindow(mTabLayout);
+                    int [] locations = new int[2];
+                    mTabLayout.getLocationOnScreen(locations);
+                    mCallTypeRightPopupWindow.showPopupWindow(0,locations[1]+mTabLayout.getHeight());
                 }
             }
         });
@@ -135,6 +144,11 @@ public class PlayCallFragment extends BaseFragment{
                         if(listBaseBean.getResult() == 0){
                             configBeanList = listBaseBean.getData();
                         }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
                     }
                 });
     }

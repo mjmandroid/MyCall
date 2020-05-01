@@ -22,7 +22,9 @@
             android:layout_marginTop="10dp"/>
         <com.it.fan.mycall.view.RoundButton
             android:id="@+id/btn_saixuan"
-            android:layout_width="66dp"
+            android:layout_width="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:layout_height="30dp"
             app:btnCornerRadius="stadium"
             app:btn_normalSolidColor="@color/white"
@@ -70,11 +72,12 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"/>
         <TextView
+            android:id="@+id/tv_call_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#555555"
             android:textSize="13sp"
-            android:text="呼入数"
+            android:text="成功呼入数"
             app:layout_constraintTop_toBottomOf="@id/h_line"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/v_line1"
@@ -92,11 +95,12 @@
             android:layout_marginTop="28dp"/>
 
         <TextView
+            android:id="@+id/tv_call_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#555555"
             android:textSize="13sp"
-            android:text="呼出数"
+            android:text="成功呼出数"
             app:layout_constraintTop_toBottomOf="@id/h_line"
             app:layout_constraintLeft_toLeftOf="@id/v_line1"
             app:layout_constraintRight_toLeftOf="@id/v_line2"
@@ -113,6 +117,7 @@
             app:layout_constraintRight_toLeftOf="@id/v_line2"
             android:layout_marginTop="28dp"/>
         <TextView
+            android:id="@+id/tv_call_loss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#555555"
@@ -148,7 +153,7 @@
         android:layout_height="wrap_content">
         <com.zhy.autolayout.AutoLinearLayout
             android:orientation="vertical"
-            app:layout_scrollFlags="scroll|snap"
+            app:layout_scrollFlags="scroll"
             android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -215,7 +220,7 @@
                     android:id="@+id/fragment_call_record_real_caller"
                     android:layout_marginRight="24px"
                     android:layout_gravity="center_vertical"
-                    android:hint="请填写真实主叫"
+                    android:hint="请填写手机号或姓名"
                     android:paddingLeft="10dp"
                     android:textColor="@color/text333333"
                     android:textSize="30px"
@@ -247,7 +252,7 @@
                     android:id="@+id/fragment_call_record_real_called"
                     android:layout_marginRight="24px"
                     android:layout_gravity="center_vertical"
-                    android:hint="请填写真实被叫"
+                    android:hint="请填写手机号或姓名"
                     android:paddingLeft="10dp"
                     android:textColor="@color/text333333"
                     android:textSize="30px"

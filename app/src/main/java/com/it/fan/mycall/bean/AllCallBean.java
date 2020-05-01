@@ -1,10 +1,12 @@
 package com.it.fan.mycall.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by fan on 2019/6/5.
  */
 
-public class AllCallBean {
+public class AllCallBean implements Serializable{
     private String attachePhone;
     private String attacheVitrual;
     private int configId;
@@ -33,6 +35,7 @@ public class AllCallBean {
     private int call_duration;
     private String proId;
     private String proName;
+    public String id;
 
     public String getProId() {
         return proId;

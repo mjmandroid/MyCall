@@ -17,7 +17,8 @@
 
         <TextView
             android:id="@+id/item_all_call_phoneNum"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="24px"
@@ -25,10 +26,6 @@
             android:textColor="@color/text333333"
             android:textSize="14sp" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
         <TextView
             android:id="@+id/item_all_call_time"
             android:layout_width="wrap_content"

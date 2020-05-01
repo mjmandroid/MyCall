@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.it.fan.mycall.bean.BaseBean;
 import com.it.fan.mycall.bean.ContactDetailInfo;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.util.Api;
+import com.it.fan.mycall.util.CallUtil;
 import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.util.Utility;
@@ -83,6 +85,7 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(R.id.tv_back).setOnClickListener(this);
         findViewById(R.id.btn_edit).setOnClickListener(this);
+        findViewById(R.id.tv_phone).setOnClickListener(this);
     }
 
     @Override
@@ -104,7 +107,7 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
                                 if(addressOne != null){
                                     tv_tag.setText(addressOne.getUserLabel());
                                     tv_name.setText(addressOne.getUserName());
-                                    tv_project_name.setText(addressOne.getConfigName());
+                                    tv_project_name.setText(addressOne.getProName());
                                     tv_patient_name.setText(addressOne.getUserName());
                                     tv_phone.setText(addressOne.getUserPhone());
                                     tv_mark.setText(addressOne.getUserRemark());
@@ -155,6 +158,10 @@ public class ContactDetailActivity extends BaseActivity implements View.OnClickL
                 intent.putExtra("info",mInfo);
             }
             startActivity(intent);
+        } else if(v.getId() == R.id.tv_phone){
+            if(mInfo != null && !TextUtils.isEmpty(mInfo.getUserPhone())){
+                CallUtil.showSelectVirtualDialog(this,mInfo.getUserPhone());
+            }
         }
     }
 

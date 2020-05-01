@@ -122,6 +122,8 @@
                     android:textSize="15sp"
                     android:hint="请输入患者姓名"
                     android:layout_marginLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:singleLine="true"
                     android:gravity="center_vertical"/>
             </LinearLayout>
             <View
@@ -148,6 +150,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:textColor="#1c87e5"
+                    android:maxLength="11"
                     android:textSize="15sp"
                     android:inputType="phone"
                     android:hint="请输入手机号"
@@ -179,6 +182,7 @@
                     android:background="@null"
                     android:textColor="#333333"
                     android:textSize="15sp"
+                    android:maxLength="5"
                     android:hint="请输入备注"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"/>
@@ -208,6 +212,8 @@
                     android:background="@null"
                     android:textColor="#333333"
                     android:textSize="15sp"
+                    android:paddingRight="15dp"
+                    android:singleLine="true"
                     android:hint="请输入指定医院"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"/>
@@ -238,6 +244,8 @@
                     android:textColor="#333333"
                     android:textSize="15sp"
                     android:hint="请输入指定医生"
+                    android:paddingRight="15dp"
+                    android:singleLine="true"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"/>
             </LinearLayout>

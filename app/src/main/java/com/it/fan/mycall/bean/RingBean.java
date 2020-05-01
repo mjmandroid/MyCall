@@ -14,8 +14,8 @@ public class RingBean {
     private String userName;
     private String userPhone;
     private String userPrefix;
-    private String userRemark;
-    private String vitrualPhone;
+    private String userRemark = "";
+    private String vitrualPhone = "";
 
     public String getProId() {
         return proId;

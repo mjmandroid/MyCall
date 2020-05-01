@@ -52,7 +52,6 @@ public class LoginActivity extends BaseActivity {
             mUserName.setText(phone);
             mUserPwd.setText(pwd);
         }
-
         //ShortcutBadger.applyCount(this, 5);
     }
 

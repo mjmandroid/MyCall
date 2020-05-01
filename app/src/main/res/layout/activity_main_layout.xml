@@ -17,6 +17,14 @@
             android:layout_centerHorizontal="true"
             android:text="拨号"
             android:layout_marginBottom="15dp"/>
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="20dp"
+            android:layout_height="12dp"
+            android:scaleType="centerCrop"
+            android:layout_toRightOf="@id/tv_title"
+            android:src="@mipmap/btn_down"
+            android:visibility="invisible"/>
     </RelativeLayout>
     <FrameLayout
         android:id="@+id/fl_fragment_content"

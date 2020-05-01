@@ -1,5 +1,7 @@
 package com.it.fan.mycall.util;
 
+import com.it.fan.mycall.BuildConfig;
+
 /**
  * Created by fan on 2019/6/4.
  */
@@ -8,7 +10,8 @@ public interface Api {
 //    String TEST1 = "https://test.mdmooc.org/hzzcc";//测试
     //String TEST = "https://apionline.mdmooc.org/hzzc";//测试1
     //String TEST = "https://liyizhe.mynatapp.cc/hzzcc";//测试2
-    String TEST = "https://apionline.mdmooc.org/hzzc";//线上
+    String TEST = BuildConfig.configEnv;//线上
+
 
     String LOGIN = TEST +"/mobile/main/loginCheck";
     String ALLCALL = TEST +"/mobile/main/allCalls";//全部通话

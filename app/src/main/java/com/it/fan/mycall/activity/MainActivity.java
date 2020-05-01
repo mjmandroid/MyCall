@@ -19,10 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,17 +33,25 @@ import android.widget.Toast;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.gyf.immersionbar.ImmersionBar;
 import com.it.fan.mycall.R;
+import com.it.fan.mycall.bean.BaseBean;
+import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.fragment.CallRecordFragment;
 import com.it.fan.mycall.fragment.ClaimFragment;
 import com.it.fan.mycall.fragment.ContactsFragment;
 import com.it.fan.mycall.fragment.PatientInfoQueryFragment;
 import com.it.fan.mycall.fragment.PlayCallFragment;
+import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.service.JobSchedulerService;
 import com.it.fan.mycall.service.TracePhoneService;
+import com.it.fan.mycall.util.Api;
 import com.it.fan.mycall.util.CallUtil;
+import com.it.fan.mycall.util.JsonCallback;
 import com.it.fan.mycall.util.LogUtils;
+import com.it.fan.mycall.util.SpUtil;
 import com.it.fan.mycall.util.Utility;
+import com.it.fan.mycall.view.ScreenCallRecordPop;
 import com.it.fan.mycall.view.VirtualKeyboardView;
+import com.lzy.okgo.OkGo;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.zhy.autolayout.AutoLayoutActivity;
 
@@ -49,6 +59,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class MainActivity extends AutoLayoutActivity {
 
@@ -70,6 +83,8 @@ public class MainActivity extends AutoLayoutActivity {
             Manifest.permission.READ_CALL_LOG,
             android.Manifest.permission.CALL_PHONE
     };
+    private ImageView iv_arrow;
+    private List<ConfigBean> configBeanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +123,13 @@ public class MainActivity extends AutoLayoutActivity {
     private void initView() {
 //        mTablayout = (SegmentTabLayout) findViewById(R.id.activity_main_tabLayout);
         tv_title = findViewById(R.id.tv_title);
+        iv_arrow = findViewById(R.id.iv_arrow);
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tv_title.getLayoutParams();
         lp.topMargin = Utility.getStatusBarHeight(this)+Utility.dip2px(this,15);
         tv_title.setLayoutParams(lp);
+        RelativeLayout.LayoutParams ip = (RelativeLayout.LayoutParams) iv_arrow.getLayoutParams();
+        ip.topMargin = Utility.getStatusBarHeight(this)+Utility.dip2px(this,22);
+        iv_arrow.setLayoutParams(ip);
         mFragments.clear();
         mFragments.add(new PlayCallFragment());
         mFragments.add(new CallRecordFragment());
@@ -118,8 +137,42 @@ public class MainActivity extends AutoLayoutActivity {
         mFragments.add(new PatientInfoQueryFragment());
         mContent = mFragments.get(0);
         commitFragment(R.id.fl_fragment_content,mContent);
-
+        findViewById(R.id.iv_arrow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProPop();
+            }
+        });
+        tv_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iv_arrow.getVisibility() == View.VISIBLE){
+                    showProPop();
+                }
+            }
+        });
     }
+
+    private void showProPop(){
+        ScreenCallRecordPop configPop = new ScreenCallRecordPop(MainActivity.this, configBeanList, true);
+        configPop.setBackgroundColor(0x0);
+        configPop.setmItemSelectListener(new ScreenCallRecordPop.IItemSelectListener<ConfigBean>() {
+            @Override
+            public void onSelect(ConfigBean data) {
+                ContactsFragment f = (ContactsFragment) mFragments.get(2);
+                if(!"全部".equals(data.getProName())){
+                    tv_title.setText(data.getProName()+"-"+"通讯录");
+                } else {
+                    tv_title.setText("通讯录");
+                }
+                f.selectItem(data);
+            }
+        });
+        int[] los = new int[2];
+        tv_title.getLocationOnScreen(los);
+        configPop.showPopupWindow(0, los[1] + tv_title.getHeight());
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -178,18 +231,22 @@ public class MainActivity extends AutoLayoutActivity {
                     case R.id.rb_call:
                         switchContent(mFragments.get(0));
                         tv_title.setText("拨号");
+                        iv_arrow.setVisibility(View.INVISIBLE);
                         break;
                     case R.id.rb_record:
                         switchContent(mFragments.get(1));
                         tv_title.setText("话单记录");
+                        iv_arrow.setVisibility(View.INVISIBLE);
                         break;
                     case R.id.rb_contracts:
                         switchContent(mFragments.get(2));
                         tv_title.setText("通讯录");
+                        iv_arrow.setVisibility(View.VISIBLE);
                         break;
                     case R.id.rb_search:
                         switchContent(mFragments.get(3));
                         tv_title.setText("患者信息查询");
+                        iv_arrow.setVisibility(View.INVISIBLE);
                         break;
 
                 }
@@ -206,6 +263,16 @@ public class MainActivity extends AutoLayoutActivity {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             startService();
         }
+        OkGo.post(Api.CONFIG_INFO)
+                .params("attacheTrue", SpUtil.getString(this, GloableConstant.ATTACHETRUE))
+                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
+                    @Override
+                    public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
+                        if(listBaseBean.getResult() == 0){
+                            configBeanList = listBaseBean.getData();
+                        }
+                    }
+                });
     }
 
     /**
@@ -313,4 +380,17 @@ public class MainActivity extends AutoLayoutActivity {
         transaction.commit();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }

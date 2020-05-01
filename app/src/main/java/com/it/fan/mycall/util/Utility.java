@@ -7,7 +7,9 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.it.fan.mycall.view.MyApp;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 /**
@@ -64,5 +66,13 @@ public class Utility {
 
     public static int getScreenWidth(Context context) {
         return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public static void showToast(String str){
+        Toast.makeText(MyApp.getInstance(),str,Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showLongToast(String str){
+        Toast.makeText(MyApp.getInstance(),str,Toast.LENGTH_LONG).show();
     }
 }

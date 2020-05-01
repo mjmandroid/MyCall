@@ -52,7 +52,7 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
     @BindView(R.id.fl_other)
     FrameLayout fl_other;
 
-    private boolean[] flags = {true,false,false};
+    private boolean[] flags = {true, false, false};
     private List<ConfigBean> configBeanList;
     private ConfigBean mConfigBean;
 
@@ -65,8 +65,13 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
     protected void initView() {
         ImmersionBar.with(this).transparentStatusBar().statusBarDarkFont(true).init();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) tv_title.getLayoutParams();
-        lp.topMargin = Utility.getStatusBarHeight(this)+Utility.dip2px(this,15);
+        lp.topMargin = Utility.getStatusBarHeight(this) + Utility.dip2px(this, 15);
         tv_title.setLayoutParams(lp);
+        Intent intent = getIntent();
+        String userPhone = intent.getStringExtra("userPhone");
+        if(!TextUtils.isEmpty(userPhone)){
+            et_phone.setText(userPhone);
+        }
     }
 
     @Override
@@ -76,6 +81,7 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
         fl_other.setOnClickListener(this);
         findViewById(R.id.btn_save).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.tv_back).setOnClickListener(this);
         findViewById(R.id.tv_select_pro).setOnClickListener(this);
 
     }
@@ -83,18 +89,20 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void initData() {
         OkGo.post(Api.CONFIG_INFO)
-                .params("attacheTrue", SpUtil.getString(this,GloableConstant.ATTACHETRUE))
+                .params("attacheTrue", SpUtil.getString(this, GloableConstant.ATTACHETRUE))
                 .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
-            @Override
-            public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
-                configBeanList = listBaseBean.getData();
-            }
-        });
+                    @Override
+                    public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
+                        if(listBaseBean.getResult() == 0){
+                            configBeanList = listBaseBean.getData();
+                        }
+                    }
+                });
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.fl_self:
                 flags[0] = !flags[0];
                 flags[1] = false;
@@ -117,10 +125,11 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
                 save();
                 break;
             case R.id.iv_back:
+            case R.id.tv_back:
                 finish();
                 break;
             case R.id.tv_select_pro:
-                ScreenCallRecordPop configPop = new ScreenCallRecordPop(this, configBeanList,false);
+                ScreenCallRecordPop configPop = new ScreenCallRecordPop(this, configBeanList, false);
                 configPop.setBackgroundColor(0x0);
                 configPop.setmItemSelectListener(new ScreenCallRecordPop.IItemSelectListener<ConfigBean>() {
                     @Override
@@ -130,18 +139,20 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
 
                     }
                 });
-                configPop.showPopupWindow(tv_select_pro);
+                int[] los = new int[2];
+                tv_select_pro.getLocationOnScreen(los);
+                configPop.showPopupWindow(0, los[1] + tv_select_pro.getHeight());
                 break;
         }
 
     }
 
     private void save() {
-        if(TextUtils.isEmpty(tv_select_pro.getText().toString())){
-            Toast.makeText(this,"请选择项目",Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(tv_select_pro.getText().toString())) {
+            Toast.makeText(this, "请选择项目", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(mConfigBean == null){
+        if (mConfigBean == null) {
             return;
         }
         String userPhone = et_phone.getText().toString().trim();
@@ -149,29 +160,33 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
         String userName = et_patient_name.getText().toString().trim();
         String userRemark = et_mark.getText().toString().trim();
         String label = "";
-        if(flags[0]){
+        if (flags[0]) {
             label = "本人";
-        } else if(flags[1]){
+        } else if (flags[1]) {
             label = "家属";
-        } else if(flags[2]){
+        } else if (flags[2]) {
             label = "其他";
+        }
+        if(TextUtils.isEmpty(userPhone)){
+            Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+            return;
         }
         final ProgressHUD progressHUD = ProgressHUD.show(this, "正在保存...");
         OkGo.post(Api.CONTACT_INFO_SAVE)
-                .params("configId",mConfigBean.getConfigId())
-                .params("proId",mConfigBean.getId())
-                .params("vitrualPhone",mConfigBean.getVitrualPhone())
-                .params("userPhone",userPhone)
-                .params("userDoctor",userDoctor)
-                .params("userLabel",label)
-                .params("userHospital",et_hospital.getText().toString().trim())
-                .params("userName",userName)
-                .params("userRemark",userRemark)
+                .params("configId", mConfigBean.getConfigId())
+                .params("proId", mConfigBean.getId())
+                .params("vitrualPhone", mConfigBean.getVitrualPhone())
+                .params("userPhone", userPhone)
+                .params("userDoctor", userDoctor)
+                .params("userLabel", label)
+                .params("userHospital", et_hospital.getText().toString().trim())
+                .params("userName", userName)
+                .params("userRemark", userRemark)
                 .execute(new JsonCallback<BaseBean<Object>>() {
                     @Override
                     public void onSuccess(BaseBean<Object> objectBaseBean, Call call, Response response) {
-                        if(objectBaseBean.getResult() == 0){
-                            Toast.makeText(MyApp.getInstance(),"保存成功",Toast.LENGTH_SHORT).show();
+                        if (objectBaseBean.getResult() == 0) {
+                            Toast.makeText(MyApp.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                         progressHUD.dismiss();
@@ -186,18 +201,18 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    private void changeState(){
-        if(flags[0]){
+    private void changeState() {
+        if (flags[0]) {
             fl_self.getChildAt(1).setVisibility(View.VISIBLE);
         } else {
             fl_self.getChildAt(1).setVisibility(View.INVISIBLE);
         }
-        if(flags[1]){
+        if (flags[1]) {
             fl_home.getChildAt(1).setVisibility(View.VISIBLE);
         } else {
             fl_home.getChildAt(1).setVisibility(View.INVISIBLE);
         }
-        if(flags[2]){
+        if (flags[2]) {
             fl_other.getChildAt(1).setVisibility(View.VISIBLE);
         } else {
             fl_other.getChildAt(1).setVisibility(View.INVISIBLE);

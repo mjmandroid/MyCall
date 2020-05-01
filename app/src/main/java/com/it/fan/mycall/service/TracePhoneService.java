@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.activity.LockedScreenActivity;
@@ -102,6 +103,7 @@ public class TracePhoneService extends Service {
                         break;
                     case TelephonyManager.CALL_STATE_RINGING://当前状态为响铃
                         loopCount = 0;
+                        Toast.makeText(getApplicationContext(),"来电"+phoneNumber,Toast.LENGTH_SHORT).show();
                         Log.e("debug", "onCallStateChanged:CALL_STATE_RINGING "+phoneNumber );
                         searchPhoneInfo(phoneNumber);
                         break;
@@ -127,8 +129,6 @@ public class TracePhoneService extends Service {
                                 showContent.append("【")
                                         .append(ringBean.getProName())
                                         .append("】")
-                                        .append(ringBean.getUserHospital())
-                                        .append("-")
                                         .append(ringBean.getUserName())
                                         .append("-")
                                         .append(ringBean.getUserLabel())
@@ -137,18 +137,22 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
+                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
                                 sendNofity(showContent.toString());
                             } else if (ringBeanBaseBean.getResult() == 2) {
                                 StringBuilder showContent = new StringBuilder();
                                 showContent.append("【")
                                         .append(ringBean.getProName())
                                         .append("】")
-                                        .append(ringBean.getVitrualPhone())
+                                        .append(ringBean.getUserPhone())
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 sendNofity(showContent.toString());
+                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
                             } else {
+                                Log.e("debug", "onSuccess: 查询失败");
+                                Toast.makeText(getApplicationContext(),"查询失败 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
                                 searchPhoneInfo(phoneNumber);
                             }
                         }
@@ -156,6 +160,7 @@ public class TracePhoneService extends Service {
                         @Override
                         public void onError(Call call, Response response, Exception e) {
                             super.onError(call, response, e);
+                            Toast.makeText(getApplicationContext(),"网络异常 result="+e.toString(),Toast.LENGTH_SHORT).show();
                             searchPhoneInfo(phoneNumber);
                         }
                     });

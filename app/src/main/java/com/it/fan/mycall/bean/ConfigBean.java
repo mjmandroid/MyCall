@@ -62,4 +62,16 @@ public class ConfigBean {
         this.configId = configId;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ConfigBean{" +
+                "createTime=" + createTime +
+                ", deleteFlag='" + deleteFlag + '\'' +
+                ", id=" + id +
+                ", proName='" + proName + '\'' +
+                ", vitrualPhone='" + vitrualPhone + '\'' +
+                ", configId='" + configId + '\'' +
+                '}';
+    }
 }

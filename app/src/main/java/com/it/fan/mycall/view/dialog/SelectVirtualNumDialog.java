@@ -40,7 +40,7 @@ public class SelectVirtualNumDialog extends BaseDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         final View view = inflater.inflate(R.layout.dialog_select_virtual_num, null);
-        view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fl_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -54,7 +54,7 @@ public class SelectVirtualNumDialog extends BaseDialogFragment {
         });
         tv_call = view.findViewById(R.id.tv_call);
         mRecyclerView = view.findViewById(R.id.recyclerView);
-        setCancelable(false);
+        setCancelable(true);
         initView();
         return view;
     }

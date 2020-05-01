@@ -21,9 +21,24 @@ public class MyAllCallAdapter extends BaseQuickAdapter<AllCallBean,BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, AllCallBean item) {
-        helper.setText(R.id.item_all_call_phoneNum,item.getPatientPhone()+"("+item.getCallCount()+")");
+        if(item.getCallCount()>1){
+            helper.setText(R.id.item_all_call_phoneNum,item.getPatientPhone()+"("+item.getCallCount()+")");
+        } else {
+            helper.setText(R.id.item_all_call_phoneNum,item.getPatientPhone());
+        }
+
         if(!TextUtils.isEmpty(item.getUserNamePat())){
-            helper.setText(R.id.item_all_call_phoneNum,item.getUserNamePat()+"("+item.getCallCount()+")");
+            String content = item.getProName() + "-" + item.getUserNamePat();
+            if(!TextUtils.isEmpty(item.getUserLabel())){
+                content = content +"-"+item.getUserLabel();
+            }
+            if(!TextUtils.isEmpty(item.getUserRemark())){
+                content = content + "-" + item.getUserRemark();
+            }
+            if(item.getCallCount() > 1){
+                content = content + "(" + item.getCallCount() + ")";
+            }
+            helper.setText(R.id.item_all_call_phoneNum,content);
         }
         helper.setText(R.id.item_all_call_time,item.getShowTime());
         helper.addOnClickListener(R.id.item_all_call_detail);

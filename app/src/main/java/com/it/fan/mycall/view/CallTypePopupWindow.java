@@ -37,7 +37,7 @@ public class CallTypePopupWindow extends BasePopupWindow {
     }
 
     public CallTypePopupWindow(Context context, final MyTablayout tablayout, List<ConfigBean> configBeanList,String mDefaultItemName) {
-        super(context, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        super(context, ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         this.tablayout = tablayout;
         this.mConfigList = configBeanList;
         this.mDefaultItemName = mDefaultItemName;
