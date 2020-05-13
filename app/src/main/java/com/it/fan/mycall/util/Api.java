@@ -2,6 +2,8 @@ package com.it.fan.mycall.util;
 
 import com.it.fan.mycall.BuildConfig;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by fan on 2019/6/4.
  */
@@ -50,4 +52,6 @@ public interface Api {
     String TODAY_CALL = TEST + "/mobile/main/todayCall";
     //话单查询 new
     String CALLRECORD_QUERYNEW = TEST + "/mobile/main/inquiryRecordNew";
+    //今日通话详情
+    String TODAY_CALL_DETAIL = TEST + "/mobile/main/todayCallList";
 }

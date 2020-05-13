@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -89,6 +90,8 @@ public class MainActivity extends AutoLayoutActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window win = getWindow();
+        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         ImmersionBar.with(this).transparentStatusBar().statusBarDarkFont(true).init();
 //        Utility.setActionBar(this, R.color.text999999);
         setContentView(R.layout.activity_main_layout);

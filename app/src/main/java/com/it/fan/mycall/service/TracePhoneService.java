@@ -4,8 +4,10 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.it.fan.mycall.R;
 import com.it.fan.mycall.activity.LockedScreenActivity;
 import com.it.fan.mycall.bean.BaseBean;
+import com.it.fan.mycall.bean.ConfigBean;
 import com.it.fan.mycall.bean.RingBean;
 import com.it.fan.mycall.gloable.GloableConstant;
 import com.it.fan.mycall.receiver.NotificationClickReceiver;
@@ -40,21 +43,27 @@ import com.it.fan.mycall.util.Utility;
 import com.it.fan.mycall.view.MyApp;
 import com.lzy.okgo.OkGo;
 
+import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Response;
+
+import static com.lzy.okgo.OkGo.getContext;
 
 public class TracePhoneService extends Service {
 
     private int loopCount = 0;
     private static final int MAX_SIZE = 5;
+    private boolean isAddView;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            sendNofity("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+//            sendNofity("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
             Log.e("debug", "handleMessage: "+"aaaaaaaaaaaaaaaaaaaaa" );
         }
     };
+    private PhoneReceiver phoneReceiver;
 
 
     @Nullable
@@ -82,6 +91,11 @@ public class TracePhoneService extends Service {
 //        Notification notification = new NotificationCompat.Builder(this, id).build();
 //        startForeground(100, notification);
         Log.e("debug", "onCreate: " );
+        phoneReceiver = new PhoneReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
+        intentFilter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
+        registerReceiver(phoneReceiver,intentFilter);
     }
 
 
@@ -89,29 +103,20 @@ public class TracePhoneService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("debug", "onStartCommand:CALL_STATE_IDLE " );
         final WindowManager mWindowManager = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        mTelephonyManager.listen(new PhoneStateListener() {
-            @Override
-            public void onCallStateChanged(int state, String phoneNumber) {
-                switch (state) {
-                    case TelephonyManager.CALL_STATE_IDLE://当前状态为挂断
-                        Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
-                        break;
-                    case TelephonyManager.CALL_STATE_OFFHOOK://接听或者拨打
-                        Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
-                        Log.e("debug", "onCallStateChanged:CALL_STATE_OFFHOOK "+phoneNumber );
-                        break;
-                    case TelephonyManager.CALL_STATE_RINGING://当前状态为响铃
-                        loopCount = 0;
-                        Toast.makeText(getApplicationContext(),"来电"+phoneNumber,Toast.LENGTH_SHORT).show();
-                        Log.e("debug", "onCallStateChanged:CALL_STATE_RINGING "+phoneNumber );
-                        searchPhoneInfo(phoneNumber);
-                        break;
-                }
-            }
-        }, PhoneStateListener.LISTEN_CALL_STATE);
+
 
         return START_STICKY;
+    }
+
+    private void test() {
+//        OkGo.post(Api.CONFIG_INFO)
+//                .params("attacheTrue", SpUtil.getString(getContext(),GloableConstant.ATTACHETRUE))
+//                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
+//                    @Override
+//                    public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
+//
+//                    }
+//                });
     }
 
     private void searchPhoneInfo(final String phoneNumber) {
@@ -137,7 +142,7 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
-                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 sendNofity(showContent.toString());
                             } else if (ringBeanBaseBean.getResult() == 2) {
                                 StringBuilder showContent = new StringBuilder();
@@ -148,20 +153,24 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 sendNofity(showContent.toString());
-                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
                             } else {
                                 Log.e("debug", "onSuccess: 查询失败");
-                                Toast.makeText(getApplicationContext(),"查询失败 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"查询失败 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 searchPhoneInfo(phoneNumber);
+                                test();
+                                sendNofity(ringBeanBaseBean.getMsg());
                             }
                         }
 
                         @Override
                         public void onError(Call call, Response response, Exception e) {
                             super.onError(call, response, e);
-                            Toast.makeText(getApplicationContext(),"网络异常 result="+e.toString(),Toast.LENGTH_SHORT).show();
+                            Log.e("debug", "onError: 查询失败");
+                            Toast.makeText(getApplicationContext(),"网络异常 result="+e.toString(),Toast.LENGTH_LONG).show();
                             searchPhoneInfo(phoneNumber);
+                            test();
                         }
                     });
         }
@@ -200,7 +209,11 @@ public class TracePhoneService extends Service {
         wmParams.y = Utility.dip2px(this,50);
         wmParams.windowAnimations = R.style.notification_animation;
         try {
+            if(isAddView){
+                return;
+            }
             mWindowManager.addView(notificationView, wmParams);
+            isAddView = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -234,5 +247,44 @@ public class TracePhoneService extends Service {
         //释放
         wl.release();
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(phoneReceiver);
+    }
+
+    private class PhoneReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (!Intent.ACTION_NEW_OUTGOING_CALL.equals(action)){
+                TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                mTelephonyManager.listen(new PhoneStateListener() {
+                    @Override
+                    public void onCallStateChanged(int state, String phoneNumber) {
+                        switch (state) {
+                            case TelephonyManager.CALL_STATE_IDLE://当前状态为挂断
+                                Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
+                                break;
+                            case TelephonyManager.CALL_STATE_OFFHOOK://接听或者拨打
+                                Log.e("debug", "onCallStateChanged:CALL_STATE_IDLE "+phoneNumber );
+                                Log.e("debug", "onCallStateChanged:CALL_STATE_OFFHOOK "+phoneNumber );
+                                break;
+                            case TelephonyManager.CALL_STATE_RINGING://当前状态为响铃
+                                loopCount = 0;
+                                Toast.makeText(getApplicationContext(),"来电"+phoneNumber,Toast.LENGTH_SHORT).show();
+                                Log.e("debug", "onCallStateChanged:CALL_STATE_RINGING "+phoneNumber );
+                                isAddView = false;
+                                searchPhoneInfo(phoneNumber);
+
+                                break;
+                        }
+                    }
+                }, PhoneStateListener.LISTEN_CALL_STATE);
+            }
+        }
     }
 }

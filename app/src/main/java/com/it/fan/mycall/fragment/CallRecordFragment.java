@@ -92,6 +92,7 @@ public class CallRecordFragment extends BaseFragment {
     private ScreenCallRecordPop mScreenCallRecordPop;
     private List<ConfigBean> configBeanList;
     private String proId = "";
+    private String sx_proId = "";
     private TextView tv_saixuan;
 
     @Override
@@ -149,6 +150,7 @@ public class CallRecordFragment extends BaseFragment {
                         @Override
                         public void onSelect(ConfigBean data) {
                             tv_saixuan.setText(data.getProName());
+                            sx_proId = String.valueOf(data.getId());
                             getTodayData(data.getId());
                         }
                     });
@@ -212,18 +214,21 @@ public class CallRecordFragment extends BaseFragment {
             case R.id.tv_enter_num:
                 intent = new Intent(getContext(), RecordDetailActivity.class);
                 intent.putExtra("type",GloableConstant.CALL_IN_TYPE);
+                intent.putExtra("proId",sx_proId);
                 getContext().startActivity(intent);
                 break;
             case R.id.tv_call_out:
             case R.id.tv_out_num:
                 intent = new Intent(getContext(), RecordDetailActivity.class);
                 intent.putExtra("type",GloableConstant.CALL_OUT_TYPE);
+                intent.putExtra("proId",sx_proId);
                 getContext().startActivity(intent);
                 break;
             case R.id.tv_call_loss:
             case R.id.tv_loss_num:
                 intent = new Intent(getContext(), RecordDetailActivity.class);
                 intent.putExtra("type",GloableConstant.CALL_LOSS_TYPE);
+                intent.putExtra("proId",sx_proId);
                 getContext().startActivity(intent);
                 break;
 
