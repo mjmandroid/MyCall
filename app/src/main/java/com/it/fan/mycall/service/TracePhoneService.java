@@ -54,7 +54,6 @@ public class TracePhoneService extends Service {
 
     private int loopCount = 0;
     private static final int MAX_SIZE = 5;
-    private boolean isAddView;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -102,22 +101,10 @@ public class TracePhoneService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("debug", "onStartCommand:CALL_STATE_IDLE " );
-        final WindowManager mWindowManager = (WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-
 
         return START_STICKY;
     }
 
-    private void test() {
-//        OkGo.post(Api.CONFIG_INFO)
-//                .params("attacheTrue", SpUtil.getString(getContext(),GloableConstant.ATTACHETRUE))
-//                .execute(new JsonCallback<BaseBean<List<ConfigBean>>>() {
-//                    @Override
-//                    public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
-//
-//                    }
-//                });
-    }
 
     private void searchPhoneInfo(final String phoneNumber) {
         loopCount++;
@@ -142,7 +129,7 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
-                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 sendNofity(showContent.toString());
                             } else if (ringBeanBaseBean.getResult() == 2) {
                                 StringBuilder showContent = new StringBuilder();
@@ -153,14 +140,13 @@ public class TracePhoneService extends Service {
                                         .append("-")
                                         .append("正在拨打您的电话，请注意接听~");
                                 sendNofity(showContent.toString());
-                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getApplicationContext(),"查询成功 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 Log.e("debug", "onSuccess: "+ ringBean.toString());
                             } else {
                                 Log.e("debug", "onSuccess: 查询失败");
-                                Toast.makeText(getApplicationContext(),"查询失败 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getApplicationContext(),"查询失败 result="+ringBeanBaseBean.getResult(),Toast.LENGTH_LONG).show();
                                 searchPhoneInfo(phoneNumber);
-                                test();
-                                sendNofity(ringBeanBaseBean.getMsg());
+//                                sendNofity(ringBeanBaseBean.getMsg());
                             }
                         }
 
@@ -168,9 +154,8 @@ public class TracePhoneService extends Service {
                         public void onError(Call call, Response response, Exception e) {
                             super.onError(call, response, e);
                             Log.e("debug", "onError: 查询失败");
-                            Toast.makeText(getApplicationContext(),"网络异常 result="+e.toString(),Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(),"网络异常 result="+e.toString(),Toast.LENGTH_LONG).show();
                             searchPhoneInfo(phoneNumber);
-                            test();
                         }
                     });
         }
@@ -206,14 +191,14 @@ public class TracePhoneService extends Service {
 
         wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.y = Utility.dip2px(this,50);
+        if(isScreenLock(this)){
+            wmParams.y = Utility.dip2px(this,50);
+        } else {
+            wmParams.y = Utility.dip2px(this,150);
+        }
         wmParams.windowAnimations = R.style.notification_animation;
         try {
-            if(isAddView){
-                return;
-            }
             mWindowManager.addView(notificationView, wmParams);
-            isAddView = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,7 +209,20 @@ public class TracePhoneService extends Service {
             public void run() {
                 mWindowManager.removeView(notificationView);
             }
-        },8*1000);
+        },20*1000);
+    }
+
+    /**
+     * @param context
+     * @return 是否锁屏
+     */
+    private boolean isScreenLock(Context context){
+        //屏锁管理器
+        KeyguardManager km= (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
+        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+
+        return km.isKeyguardLocked();
     }
 
     public  boolean wakeUpAndUnlock(Context context){
@@ -275,9 +273,8 @@ public class TracePhoneService extends Service {
                                 break;
                             case TelephonyManager.CALL_STATE_RINGING://当前状态为响铃
                                 loopCount = 0;
-                                Toast.makeText(getApplicationContext(),"来电"+phoneNumber,Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(),"来电"+phoneNumber,Toast.LENGTH_SHORT).show();
                                 Log.e("debug", "onCallStateChanged:CALL_STATE_RINGING "+phoneNumber );
-                                isAddView = false;
                                 searchPhoneInfo(phoneNumber);
 
                                 break;

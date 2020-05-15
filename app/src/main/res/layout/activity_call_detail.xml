@@ -29,6 +29,7 @@
             android:layout_below="@+id/activity_call_detail_icon"
             android:text="11111111"
             android:textSize="18sp"
+            android:gravity="center"
             android:textColor="@color/text333333"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"

@@ -75,12 +75,12 @@ public class CallDetailActivity extends BaseActivity {
             } else {
                 mPhoneNum.setText(showDetail);
             }
-            String pro_name = intent.getStringExtra(GloableConstant.PRO_NAME);
-            if(!TextUtils.isEmpty(pro_name)){
-                btn_operate.setText("編輯联系人");
-            }
             virtualPhone = intent.getStringExtra("virtualPhone");
             info = (AllCallBean) intent.getSerializableExtra("info");
+            String pro_name = info.getUserNamePat();
+            if(!TextUtils.isEmpty(pro_name)){
+                btn_operate.setText("编辑联系人");
+            }
         }
     }
 
