@@ -72,6 +72,9 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
         if(!TextUtils.isEmpty(userPhone)){
             et_phone.setText(userPhone);
         }
+        if(!TextUtils.isEmpty(intent.getStringExtra("proName"))){
+            tv_select_pro.setText(intent.getStringExtra("proName"));
+        }
     }
 
     @Override
@@ -95,6 +98,14 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
                     public void onSuccess(BaseBean<List<ConfigBean>> listBaseBean, Call call, Response response) {
                         if(listBaseBean.getResult() == 0){
                             configBeanList = listBaseBean.getData();
+                            if(!TextUtils.isEmpty(tv_select_pro.getText().toString()) && configBeanList != null && configBeanList.size()>0){
+                                for (ConfigBean bean : configBeanList) {
+                                    if(bean.getProName().equals(tv_select_pro.getText().toString())){
+                                        mConfigBean = bean;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 });
@@ -153,6 +164,7 @@ public class NewContactActivity extends BaseActivity implements View.OnClickList
             return;
         }
         if (mConfigBean == null) {
+
             return;
         }
         String userPhone = et_phone.getText().toString().trim();

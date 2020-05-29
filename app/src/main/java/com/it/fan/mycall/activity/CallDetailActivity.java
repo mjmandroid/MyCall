@@ -175,6 +175,8 @@ public class CallDetailActivity extends BaseActivity {
                 if(btn_operate.getText().toString().equals("新建联系人")){
                     Intent intent = new Intent(this,NewContactActivity.class);
                     intent.putExtra("userPhone",patientPhone);
+                    intent.putExtra("proName",info != null ? info.getProName():"");
+                    intent.putExtra("proId",info != null ? info.getProId():"");
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(this,EditContactActivity.class);
